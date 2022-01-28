@@ -962,6 +962,8 @@ public class ServerTest {
             fail(e.getMessage());
         } catch (FileNotFoundException e) {
             Assertions.fail("passoffFiles/LoadData.json not found in project root directory");
+        } finally {
+            scanner.close();
         }
     }
 
