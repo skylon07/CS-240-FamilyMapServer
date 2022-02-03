@@ -8,7 +8,7 @@ package models;
 public class Person {
     /** The unique identifier for this Person */
     private String personID;
-    /** The username of the User this Person represents */
+    /** The username of the User with the family tree this Person belongs to */
     private String associatedUsername;
     /** The first name of the person */
     private String firstName;
@@ -51,11 +51,11 @@ public class Person {
      * Creates a Person by defining only required properties
      * (setting the rest to null)
      * 
-     * @param personID
-     * @param associatedUsername
-     * @param firstName
-     * @param lastName
-     * @param gender
+     * @param personID the Person ID to use
+     * @param associatedUsername the username of the User to tie to this person
+     * @param firstName the person's first name
+     * @param lastName the person's last name
+     * @param gender the person's gender: "f" or "m"
      */
     public Person(String personID, String associatedUsername,
                   String firstName, String lastName, String gender) {

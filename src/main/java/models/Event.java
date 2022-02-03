@@ -8,7 +8,7 @@ package models;
 public class Event {
     /** The unique identifier for this Event */
     private String eventID;
-    /** The username of the User tied to this event */
+    /** The username of the User whose family tree includes this event */
     private String associatedUsername;
     /** The Person ID of the Person tied to this event */
     private String personID;
@@ -28,15 +28,15 @@ public class Event {
     /**
      * Creates an Event by defining each property directly
      * 
-     * @param eventID
-     * @param associatedUsername
-     * @param personID
-     * @param latitude
-     * @param longitude
-     * @param country
-     * @param city
-     * @param eventType
-     * @param year
+     * @param eventID the identifier for the event
+     * @param associatedUsername the username to tie the event to
+     * @param personID the Person ID this event belongs to
+     * @param latitude the event location's latitude
+     * @param longitude the event location's longitude
+     * @param country the event location's country
+     * @param city the event location's city
+     * @param eventType the type of the event
+     * @param year the year the event happened
      */
     public Event(String eventID, String associatedUsername, String personID,
                  float latitude, float longitude, String country, String city,
