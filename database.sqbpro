@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/Users/skylon07/School/CS 240/FamilyMapServerStudent/database.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2247"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainauthtoken"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="authtoken" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="84"/><column index="2" value="76"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="init tables (with test data)       ">pragma foreign_keys = off;
+drop table if exists user;
+drop table if exists person;
+drop table if exists event;
+drop table if exists authtoken;
+drop table if exists enum_gender;
+pragma foreign_keys = on;
+
+/*
+	create tables
+*/
+create table enum_gender(
+	gender		text	not null	primary key
+);
+insert into enum_gender(gender) values
+	('f'),
+	('m');
+
+create table user (
+	username	text	not null	primary key,
+	&quot;password&quot; 	text	not null,
+	email 		text	not null,
+	firstName	text	not null,
+	lastName	text	not null,
+	gender		text	not null,
+	personID	text				unique,
+	foreign key(gender)		references enum_gender,
+	foreign key(personID)	references person(personID)
+);
+
+create table person(
+	personID			text	not null	primary key,
+	associatedUsername	text	not null,
+	firstName			text	not null,
+	lastName			text 	not null,
+	gender				text	not null,
+	fatherID			text,
+	motherID			text,
+	spouseID			text,
+	foreign key(gender)				references enum_gender,
+	foreign key(associatedUsername)	references user(username),
+	foreign key(fatherID)			references person(personID),
+	foreign key(motherID)			references person(personID),
+	foreign key(spouseID)			references person(personID)
+);
+
+create table event(
+	eventID				text	not null	primary key,
+	associatedUsername	text	not null,
+	personID			text	not null,
+	latitude			real	not null,
+	longitude			real	not null,
+	country				text 	not null,
+	city				text	not null,
+	eventType			text 	not null,
+	year				int		not null
+		check(year &gt; 0),
+	foreign key(associatedUsername)	references user(username),
+	foreign key(personID)			references person(personID)
+);
+
+create table authtoken(
+	authtoken 	text	not null	primary key,
+	username	text	not null,
+	foreign key(username)	references user(username)
+);
+
+
+/*
+	some random/testing data, to prove it works
+*/
+-- create new user: person1 test1
+insert into user(
+	username,			firstName,	email,
+	&quot;password&quot;,			lastName, 	gender
+) values(
+	'test1',			'Tester',	'test1@test.test',
+	'my test password',	'TestGuy', 	'm'
+);
+insert into person(
+	personID, 			firstName,	gender,
+	associatedUsername, lastName
+) values(
+	'person1',			'Tester',	'm', 
+	'test1', 			'TestGuy'
+);
+update user
+	set personID = 'person1'
+	where username == 'test1';
+
+-- create new user: person2 test2
+insert into user(
+	username,				firstName,	email,
+	&quot;password&quot;,				lastName,	gender
+) values(
+	'test2', 				'Testerer',	'test2@test.test',
+	'some test password',	'TestDude',	'm'
+);
+insert into person(
+	personID,			firstName,	gender,
+	associatedUsername,	lastName
+) values(
+	'person2',			'Testerer',	'm',
+	'test2',			'TestDude'
+);
+update user
+	set personID = 'person2'
+	where username == 'test2';
+
+-- create mother for person1
+insert into person(
+	personID,			firstName,	gender,
+	associatedUsername,	lastName
+) values(
+	'person3',			'Mommy',	'f',
+	'test1',			'TestGuy'
+);
+update person
+	set motherID = 'person3'
+	where personID == 'person1';
+	
+-- create birth for person1
+insert into event(
+	eventID,			latitude,	country,
+	personID,			longitude,	city,
+	associatedUsername,	eventType,	year
+) values(
+	'event1',			91.08346,	'USA',
+	'person1',			-14.55378,	'New York',
+	'test1',			'Birth',	2000
+);
+
+-- create graduation event for person 1
+insert into event(
+	eventID,			latitude,		country,
+	personID,			longitude,		city,
+	associatedUsername,	eventType,		year
+) values(
+	'event2',			80.84624,		'USA',
+	'person1',			-23.75377,		'New York',
+	'test1',			'Graduation',	2018
+);
+
+/*
+	make some test selections
+*/
+select eventType, year
+from event
+where personID == 'person1';
+
+select personID, motherID, fatherID
+from person
+where personID == 'person1';
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
