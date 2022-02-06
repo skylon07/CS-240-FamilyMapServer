@@ -28,15 +28,15 @@ public class Event {
     /**
      * Creates an Event by defining each property directly
      * 
-     * @param eventID the identifier for the event
-     * @param associatedUsername the username to tie the event to
-     * @param personID the Person ID this event belongs to
-     * @param latitude the event location's latitude
-     * @param longitude the event location's longitude
-     * @param country the event location's country
-     * @param city the event location's city
-     * @param eventType the type of the event
-     * @param year the year the event happened
+     * @param eventID is the identifier for the event
+     * @param associatedUsername is the username to tie the event to
+     * @param personID is the Person ID this event belongs to
+     * @param latitude is the event location's latitude
+     * @param longitude is the event location's longitude
+     * @param country is the event location's country
+     * @param city  isthe event location's city
+     * @param eventType is the type of the event
+     * @param year is the year the event happened
      */
     public Event(String eventID, String associatedUsername, String personID,
                  float latitude, float longitude, String country, String city,

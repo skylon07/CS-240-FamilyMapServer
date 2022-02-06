@@ -9,8 +9,8 @@ public class AuthToken {
     /**
      * Creates an AuthToken by defining each property directly
      * 
-     * @param authtoken
-     * @param username
+     * @param authtoken is the token string to use
+     * @param username is the associated username
      */
     public AuthToken(String authtoken, String username) {
         this.setAuthtoken(authtoken);

@@ -24,13 +24,13 @@ public class User {
     /**
      * Creates a User by defining each property directly
      * 
-     * @param username the user's username
-     * @param password the user's password
-     * @param email the user's email
-     * @param firstName the user's first name
-     * @param lastName the user's last name
-     * @param gender the user's gender: "f" or "m"
-     * @param personID the Person ID to tie to the user
+     * @param username is the user's username
+     * @param password is the user's password
+     * @param email is the user's email
+     * @param firstName is the user's first name
+     * @param lastName is the user's last name
+     * @param gender is the user's gender: "f" or "m"
+     * @param personID is the Person ID to tie to the user
      */
     public User(String username, String password, String email,
                 String firstName, String lastName, String gender, String personID) {

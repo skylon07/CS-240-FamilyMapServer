@@ -26,14 +26,14 @@ public class Person {
     /**
      * Creates a Person by defining each property directly
      * 
-     * @param personID the Person ID to use
-     * @param associatedUsername the username of the User to tie to this person
-     * @param firstName the person's first name
-     * @param lastName the person's last name
-     * @param gender the person's gender: "f" or "m"
-     * @param fatherID the Person ID to use as this person's father (can be null)
-     * @param motherID the Person ID to use as this person's mother (can be null)
-     * @param spouseID the Person ID to use as this person's spouse (can be null)
+     * @param personID is the Person ID to use
+     * @param associatedUsername is the username of the User to tie to this person
+     * @param firstName is the person's first name
+     * @param lastName is the person's last name
+     * @param gender is the person's gender: "f" or "m"
+     * @param fatherID is the Person ID to use as this person's father (can be null)
+     * @param motherID is the Person ID to use as this person's mother (can be null)
+     * @param spouseID is the Person ID to use as this person's spouse (can be null)
      */
     public Person(String personID, String associatedUsername, String firstName, String lastName,
                   String gender, String fatherID, String motherID, String spouseID) {
@@ -51,11 +51,11 @@ public class Person {
      * Creates a Person by defining only required properties
      * (setting the rest to null)
      * 
-     * @param personID the Person ID to use
-     * @param associatedUsername the username of the User to tie to this person
-     * @param firstName the person's first name
-     * @param lastName the person's last name
-     * @param gender the person's gender: "f" or "m"
+     * @param personID is the Person ID to use
+     * @param associatedUsername is the username of the User to tie to this person
+     * @param firstName is the person's first name
+     * @param lastName is the person's last name
+     * @param gender is the person's gender: "f" or "m"
      */
     public Person(String personID, String associatedUsername,
                   String firstName, String lastName, String gender) {
