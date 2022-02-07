@@ -1,5 +1,5 @@
 package services.requests;
 
 public class AllPersonsRequest extends GenericRequest {
-    // TODO
+    // this request intentionally left blank
 }

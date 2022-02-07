@@ -1,5 +1,6 @@
 package services.responses;
 
 public class FillResponse extends GenericResponse {
-    // TODO
+    // FillResponse contains no extra parameters
+    // this block intentionally left blank
 }

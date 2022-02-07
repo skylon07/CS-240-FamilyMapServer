@@ -1,5 +1,7 @@
 package services.responses;
 
 public class RegisterResponse extends GenericResponse {
-    // TODO
+    public String authtoken;
+    public String username;
+    public String personID;
 }

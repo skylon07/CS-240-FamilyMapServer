@@ -1,5 +1,6 @@
 package services.responses;
 
 public class LoadResponse extends GenericResponse {
-    // TODO
+    // LoadResponse contains no extra parameters
+    // this block intentionally left blank
 }

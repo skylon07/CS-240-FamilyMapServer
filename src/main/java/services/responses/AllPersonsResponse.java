@@ -1,5 +1,5 @@
 package services.responses;
 
 public class AllPersonsResponse extends GenericResponse {
-    // TODO
+    public String data;
 }

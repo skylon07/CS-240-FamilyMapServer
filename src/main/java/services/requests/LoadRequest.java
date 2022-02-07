@@ -1,5 +1,7 @@
 package services.requests;
 
 public class LoadRequest extends GenericRequest {
-    // TODO
+    public String users;
+    public String persons;
+    public String events;
 }
