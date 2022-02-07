@@ -1,10 +1,28 @@
 package services.responses;
 
 /**
- * The generic class for all responses. Currently the only purpose this serves
- * is as a generic response datatype and a placeholder for possible changes that
- * need to be applied to all response types.
+ * The generic class for all responses. Each response by default has "data",
+ * "message", and "success" properties.
  */
 abstract class GenericResponse {
-    // this block intentionally left blank
+    /** The response's associated message. For errors, the error message. */
+    private String message;
+    /** The state of a request's success or failure */
+    private boolean success;
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean getSuccess() {
+        return this.success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }
