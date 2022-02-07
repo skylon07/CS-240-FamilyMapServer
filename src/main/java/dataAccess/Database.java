@@ -47,6 +47,12 @@ public class Database {
         // TODO
         return null;
     }
+    /**
+     * The functional interface for callbacks passed to the Database.query function
+     */
+    interface QueryCallback<ModelType> {
+        public ModelType call(ResultSet currentResult);
+    }
 
     /**
      * Executes the statement as an insert/update/delete call to the database
@@ -87,8 +93,4 @@ public class Database {
         String DATABASE_PATH = "main" + File.separator + "database.sqlite";
         // TODO
     }
-}
-
-interface QueryCallback<ModelType> {
-    public ModelType call(ResultSet currentResult);
 }
