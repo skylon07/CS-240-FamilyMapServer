@@ -2,49 +2,52 @@ package dataAccess;
 
 import models.Person;
 
+/**
+ * A collection of methods that give access to Person models in the database.
+ * It can create, delete, update, and find Persons using a variety of methods.
+ */
 public class PersonAccessor extends Accessor<Person> {
-    /**
-     * Takes a Person model and stores it in the database
-     * 
-     * @param model is the Person model to insert into the database
-     * @throws AccessException when the Person model is already a row in a table
-     */
     @Override
-    public void create(Person model) throws AccessException {
+    public void create(Person[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes a Person model and removes it from the database
-     * 
-     * @param model is the Person model to delete from the database
-     * @throws AccessException when the Person model is not present in the database
-     */
     @Override
-    public void delete(Person model) throws AccessException {
+    public void delete(Person[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes a Person model (that exists in the database) and updates its corresponding row
-     * 
-     * @param model is the Person model to update
-     * @throws AccessException when the Person model doesn't exist
-     */
     @Override
-    public void update(Person model) throws AccessException {
+    public void update(Person[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes a Person model and checks if it is present in the database tables
-     * 
-     * @param model is the Person model to check for
-     * @return whether the Person model exists or not
-     */
     @Override
-    public boolean exists(Person model) {
+    public boolean[] exists(Person[] model) throws DatabaseException {
         // TODO Auto-generated method stub
-        return false;
+        return null;
+    }
+
+    /**
+     * Returns the Person matching a Person ID
+     * 
+     * @param personID is the Person ID to query by
+     * @return the corresponding Person, or null if not found
+     * @throws DatabaseException when a database error occurs
+     */
+    public Person getByID(String personID) throws DatabaseException {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Returns all Persons in the database
+     * 
+     * @return an array of all Persons in the database
+     * @throws DatabaseException when a database error occurs
+     */
+    public Person[] getAll() throws DatabaseException {
+        // TODO
+        return null;
     }
 }

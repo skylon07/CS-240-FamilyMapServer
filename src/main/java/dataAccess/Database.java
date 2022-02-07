@@ -4,14 +4,11 @@ import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 
-enum StatementType {
-    STRING,
-    INT,
-    LONG,
-    FLOAT,
-    DOUBLE,
-}
-
+/**
+ * This is the main interface to the SQLite database. This layer of abstraction
+ * allows accessors to modify/query the database without worrying (as much
+ * as possible) about directly handling JDBC data types
+ */
 public class Database {
     private Connection connection;
 
@@ -26,8 +23,9 @@ public class Database {
      * 
      * @param sqlToExec is a string containing SQL code to load into the statement
      * @return the loaded statement
+     * @throws DatabaseException when a SQLException occurs
      */
-    public PreparedStatement prepareStatement(String sqlToExec) {
+    public PreparedStatement prepareStatement(String sqlToExec) throws DatabaseException {
         // TODO
         return null;
     }
@@ -35,11 +33,13 @@ public class Database {
     /**
      * Executes the statement as a query call to the database
      * 
+     * @param <ModelType> is the model type expected from the query
      * @param statement is the prepared statement to execute
-     * @param resultMapper is a callback that takes a statement result and turns it into a model
-     * @return the ResultSet containg the query results
+     * @param resultMapper is a callback that takes a statement result and turns it into a model instance
+     * @return an array of models that matched the query
+     * @throws DatabaseException when a SQLException occurs
      */
-    public <ModelType> ModelType[] query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) {
+    public <ModelType> ModelType[] query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
         // TODO
         return null;
     }
@@ -49,19 +49,28 @@ public class Database {
      * 
      * @param statement is the prepared statement to executs
      * @return the number of modified rows
+     * @throws DatabaseException when a SQLException occurs
      */
-    public int update(PreparedStatement statement) {
+    public int update(PreparedStatement statement) throws DatabaseException {
         // TODO
         return 0;
     }
 
-    /** Commits executed statements to the database */
-    public void commit() {
+    /**
+     * Commits executed statements to the database
+     * 
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public void commit() throws DatabaseException {
         // TODO
     }
 
-    /** Clears the effects of executed statements to the last commit (or the start of the connection) */
-    public void rollback() {
+    /**
+     * Clears the effects of executed statements to the last commit (or the start of the connection)
+     * 
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public void rollback() throws DatabaseException {
         // TODO
     }
 }

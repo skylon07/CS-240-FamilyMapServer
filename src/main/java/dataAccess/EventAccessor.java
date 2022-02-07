@@ -2,49 +2,52 @@ package dataAccess;
 
 import models.Event;
 
+/**
+ * A collection of methods that give access to Event models in the database.
+ * It can create, delete, update, and find Events using a variety of methods.
+ */
 public class EventAccessor extends Accessor<Event> {
-    /**
-     * Takes an Event model and stores it in the database
-     * 
-     * @param model is the Event model to insert into the database
-     * @throws AccessException when the Event model is already a row in a table
-     */
     @Override
-    public void create(Event model) throws AccessException {
+    public void create(Event[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes an Event model and removes it from the database
-     * 
-     * @param model is the Event model to delete from the database
-     * @throws AccessException when the Event model is not present in the database
-     */
     @Override
-    public void delete(Event model) throws AccessException {
+    public void delete(Event[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes an Event model (that exists in the database) and updates its corresponding row
-     * 
-     * @param model is the Event model to update
-     * @throws AccessException when the Event model doesn't exist
-     */
     @Override
-    public void update(Event model) throws AccessException {
+    public void update(Event[] model) throws BadAccessException, DatabaseException {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Takes an Event model and checks if it is present in the database tables
-     * 
-     * @param model is the Event model to check for
-     * @return whether the Event model exists or not
-     */
     @Override
-    public boolean exists(Event model) {
+    public boolean[] exists(Event[] model) throws DatabaseException {
         // TODO Auto-generated method stub
-        return false;
+        return null;
+    }
+
+    /**
+     * Returns the Event matching an Event ID
+     * 
+     * @param eventID is the Event ID to query by
+     * @return the corresponding Event, or null if not found
+     * @throws DatabaseException when a database error occurs
+     */
+    public Event getById(String eventID) throws DatabaseException {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Returns all Events in the database
+     * 
+     * @return an array of all Events in the database
+     * @throws DatabaseException when a database error occurs
+     */
+    public Event[] getAll() throws DatabaseException {
+        // TODO
+        return null;
     }
 }

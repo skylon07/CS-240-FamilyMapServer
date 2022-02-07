@@ -11,34 +11,38 @@ public abstract class Accessor<ModelType> {
     }
 
     /**
-     * Takes a model and stores it in the database
+     * Takes a list of models and stores them in the database
      * 
-     * @param model is the model to insert into the database
-     * @throws AccessException when the model is already a row in a table
+     * @param models is the list of models to insert into the database
+     * @throws BadAccessException when a model is already a row in a table
+     * @throws DatabaseException when another database error occurs
      */
-    public abstract void create(ModelType model) throws AccessException;
+    public abstract void create(ModelType[] models) throws BadAccessException, DatabaseException;
     
     /**
-     * Takes a model and removes it from the database
+     * Takes a list of models and removes them from the database
      * 
-     * @param model is the model to delete from the database
-     * @throws AccessException when the model is not present in the database
+     * @param models is the list of models to delete from the database
+     * @throws BadAccessException when a model is not present in the database
+     * @throws DatabaseException when another database error occurs
      */
-    public abstract void delete(ModelType model) throws AccessException;
+    public abstract void delete(ModelType[] models) throws BadAccessException, DatabaseException;
 
     /**
-     * Takes a model (that exists in the database) and updates its corresponding row
+     * Takes a list of models (that exist in the database) and updates their corresponding rows
      * 
-     * @param model is the model to update
-     * @throws AccessException when the model doesn't exist
+     * @param models is the list of models to update
+     * @throws BadAccessException when a model doesn't exist
+     * @throws DatabaseException when another database error occurs
      */
-    public abstract void update(ModelType model) throws AccessException;
+    public abstract void update(ModelType[] models) throws BadAccessException, DatabaseException;
 
     /**
-     * Takes a model and checks if it is present in the database tables
+     * Takes a list of models and checks if they are present in the database tables
      * 
-     * @param model is the model to check for
-     * @return whether the model exists or not
+     * @param models is the list of models to check for
+     * @return whether the models exists or not
+     * @throws DatabaseException when another database error occurs
      */
-    public abstract boolean exists(ModelType model);
+    public abstract boolean[] exists(ModelType[] models) throws DatabaseException;
 }
