@@ -1,5 +1,9 @@
 package models;
 
+/**
+ * A representation of an authentication token which authorizes users to interact
+ * with the app after obtaining one through a login request.
+ */
 public class AuthToken {
     /** The authorization token that identifies the user's validated session */
     private String authtoken;

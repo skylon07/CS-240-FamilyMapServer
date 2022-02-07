@@ -1,6 +1,12 @@
 package dataAccess;
 
+/**
+ * A generic Accessor class that defines the base for all Accessors. It guarantees
+ * basic database manupulation operations for a given model type, however subclasses
+ * should implement more functions as needed (ex. database query functions)
+ */
 public abstract class Accessor<ModelType> {
+    /** The database wrapper, allowing Accessors to make calls to the Database */
     protected Database database;
 
     /**

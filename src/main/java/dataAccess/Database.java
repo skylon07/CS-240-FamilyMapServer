@@ -10,10 +10,14 @@ import java.util.ArrayList;
  * as possible) about directly handling JDBC data types
  */
 public class Database {
+    /** The current connection object for the database */
     private Connection connection;
 
+    /** 
+     * Creates a database with no connection at first. The connection will be
+     * checked/generated when any of the Database methods are called.
+     */
     public Database() {
-        String DATABASE_PATH = "main" + File.separator + "database.sqlite";
         this.connection = null;
     }
 
@@ -71,6 +75,16 @@ public class Database {
      * @throws DatabaseException when a SQLException occurs
      */
     public void rollback() throws DatabaseException {
+        // TODO
+    }
+
+    /**
+     * Creates a new connection object and stores it as this.connection.
+     * Creating the connection lazily (as opposed to in the constructor)
+     * avoids throwing SQLExceptions when constructing.
+     */
+    private void createConnection() {
+        String DATABASE_PATH = "main" + File.separator + "database.sqlite";
         // TODO
     }
 }
