@@ -51,4 +51,11 @@ public abstract class Accessor<ModelType> {
      * @throws DatabaseException when another database error occurs
      */
     public abstract boolean[] exists(ModelType[] models) throws DatabaseException;
+
+    /**
+     * Clears the associated table in the database
+     * 
+     * @throws DatabaseException when a database error occurs
+     */
+    public abstract void clear() throws DatabaseException;
 }

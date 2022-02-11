@@ -28,6 +28,11 @@ public class PersonAccessor extends Accessor<Person> {
         return null;
     }
 
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
     /**
      * Returns the Person matching a Person ID
      * 

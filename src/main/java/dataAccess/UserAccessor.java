@@ -23,6 +23,11 @@ public class UserAccessor extends Accessor<User> {
     }
 
     @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
+    @Override
     public boolean[] exists(User[] model) throws DatabaseException {
         // TODO Auto-generated method stub
         return null;

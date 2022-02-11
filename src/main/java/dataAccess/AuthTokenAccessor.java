@@ -28,6 +28,11 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
         return null;
     }
 
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
     /**
      * Gets the authentication token tied to a User
      * 

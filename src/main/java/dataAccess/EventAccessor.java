@@ -28,6 +28,11 @@ public class EventAccessor extends Accessor<Event> {
         return null;
     }
 
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
     /**
      * Returns the Event matching an Event ID
      * 
