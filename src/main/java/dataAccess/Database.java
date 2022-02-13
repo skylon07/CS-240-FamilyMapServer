@@ -22,6 +22,23 @@ public class Database {
     }
 
     /**
+     * A deconstructor that destroys the active connection
+     * (if one was ever created)
+     * 
+     * @throws DatabaseException if the connection throws a SQLException in rollback() or close()
+     */
+    protected void finalize() throws DatabaseException {
+        if (this.connection != null) {
+            try {
+                this.connection.rollback();
+                this.connection.close();
+            } catch (SQLException err) {
+                throw new DatabaseException(err);
+            }
+        }
+    }
+
+    /**
      * Creates a new prepared statement from the database.
      * If a connection to the database doesn't exist, this method will create one
      * 
@@ -30,8 +47,14 @@ public class Database {
      * @throws DatabaseException when a SQLException occurs
      */
     public PreparedStatement prepareStatement(String sqlToExec) throws DatabaseException {
-        // TODO
-        return null;
+        try {
+            this.initializeConnectionIfNoneExists();
+            try (PreparedStatement statement = this.connection.prepareStatement(sqlToExec)) {
+                return statement;
+            }
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
     }
 
     /**
@@ -43,9 +66,22 @@ public class Database {
      * @return an array of models that matched the query
      * @throws DatabaseException when a SQLException occurs
      */
+    // suppress warnings generated from conversion of generic Object[] to ModelType[];
+    // this is because models.toArray(new ModelType[]) cannot be used;
+    // generic arrays can't be created for template types
+    @SuppressWarnings("unchecked")
     public <ModelType> ModelType[] query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
-        // TODO
-        return null;
+        try {
+            ResultSet resultsIter = statement.executeQuery();
+            ArrayList<ModelType> models = new ArrayList<ModelType>();
+            while (resultsIter.next()) {
+                ModelType model = resultMapper.call(resultsIter);
+                models.add(model);
+            }
+            return (ModelType[]) models.toArray();
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
     }
     /**
      * The functional interface for callbacks passed to the Database.query function
@@ -62,8 +98,11 @@ public class Database {
      * @throws DatabaseException when a SQLException occurs
      */
     public int update(PreparedStatement statement) throws DatabaseException {
-        // TODO
-        return 0;
+        try {
+            return statement.executeUpdate();
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
     }
 
     /**
@@ -72,7 +111,15 @@ public class Database {
      * @throws DatabaseException when a SQLException occurs
      */
     public void commit() throws DatabaseException {
-        // TODO
+        if (this.connection != null) {
+            try {
+                this.connection.commit();
+            } catch (SQLException err) {
+                throw new DatabaseException(err);
+            }
+        } else {
+            throw new DatabaseException("Cannot commit(); No connection was opened");
+        }
     }
 
     /**
@@ -81,16 +128,31 @@ public class Database {
      * @throws DatabaseException when a SQLException occurs
      */
     public void rollback() throws DatabaseException {
-        // TODO
+        if (this.connection != null) {
+            try {
+                this.connection.rollback();
+            } catch (SQLException err) {
+                throw new DatabaseException(err);
+            }
+        } else {
+            throw new DatabaseException("Cannot rollback(); No connection was opened");
+        }
     }
 
     /**
      * Creates a new connection object and stores it as this.connection.
      * Creating the connection lazily (as opposed to in the constructor)
      * avoids throwing SQLExceptions when constructing.
+     * 
+     * @throws SQLException if the DriverManager cannot create a connection
      */
-    private void createConnection() {
-        String DATABASE_PATH = "main" + File.separator + "database.sqlite";
-        // TODO
+    private void initializeConnectionIfNoneExists() throws SQLException {
+        if (this.connection == null) {
+            String DATABASE_PATH = "main" + File.separator + "database.sqlite";
+            this.connection = DriverManager.getConnection(DATABASE_PATH);
+            // allows greater control of the transaction
+            // (specifically, commit() and rollback())
+            this.connection.setAutoCommit(false);
+        }
     }
 }

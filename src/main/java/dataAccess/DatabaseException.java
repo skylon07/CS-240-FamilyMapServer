@@ -14,6 +14,19 @@ public class DatabaseException extends Exception {
      * @param error is the SQLException that occured
      */
     public DatabaseException(SQLException error) {
-        // TODO: generate message with helpful infos based on error type
+        StringBuilder errorMsg = new StringBuilder();
+        errorMsg.append("SQL Error (");
+        errorMsg.append(error.getErrorCode());
+        errorMsg.append("): ");
+        errorMsg.append(error.getMessage());
+    }
+    
+    /**
+     * Creates a new DatabaseException given a string
+     * 
+     * @param errorMsg is the string describing the non-SQL database error
+     */
+    public DatabaseException(String errorMsg) {
+        super(errorMsg);
     }
 }
