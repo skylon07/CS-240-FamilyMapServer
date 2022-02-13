@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * allows accessors to modify/query the database without worrying (as much
  * as possible) about directly handling JDBC data types
  */
-public class Database {
+public class Database implements AutoCloseable {
     /** The current connection object for the database */
     private Connection connection;
 
