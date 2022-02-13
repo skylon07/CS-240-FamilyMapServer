@@ -22,16 +22,30 @@ public class Database {
     }
 
     /**
+     * A method called by the garbage collector; This is just a checker
+     * to help ensure that connections are closed properly
+     * 
+     * @throws DatabaseException when an active connection still exists
+    */
+    protected void finalize() throws DatabaseException {
+        if (this.connection != null) {
+            System.out.println("A Database was deconstructed without closing!");
+            throw new DatabaseException("A Database was deconstructed without closing!");
+        }
+    }
+
+    /**
      * A deconstructor that destroys the active connection
      * (if one was ever created)
      * 
      * @throws DatabaseException if the connection throws a SQLException in rollback() or close()
      */
-    protected void finalize() throws DatabaseException {
+    public void close() throws DatabaseException {
         if (this.connection != null) {
             try {
                 this.connection.rollback();
                 this.connection.close();
+                this.connection = null;
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }
