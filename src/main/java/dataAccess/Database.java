@@ -1,6 +1,5 @@
 package dataAccess;
 
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -162,7 +161,7 @@ public class Database implements AutoCloseable {
      */
     private void initializeConnectionIfNoneExists() throws SQLException {
         if (this.connection == null) {
-            String DATABASE_PATH = "main" + File.separator + "database.sqlite";
+            String DATABASE_PATH = "jdbc:sqlite:database.sqlite";
             this.connection = DriverManager.getConnection(DATABASE_PATH);
             // allows greater control of the transaction
             // (specifically, commit() and rollback())
