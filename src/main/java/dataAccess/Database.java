@@ -162,6 +162,15 @@ public class Database implements AutoCloseable {
     }
 
     /**
+     * Returns the currently active connection, if any
+     * 
+     * @return the connection, if one is present, or null
+     */
+    public Connection getActiveConnection() {
+        return this.connection;
+    }
+
+    /**
      * Creates a new prepared statement from the database.
      * If a connection to the database doesn't exist, this method will create one
      * 
