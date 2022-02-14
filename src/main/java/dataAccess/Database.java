@@ -198,9 +198,6 @@ public class Database implements AutoCloseable {
      * @return an ArrayList of models that matched the query
      * @throws DatabaseException when a SQLException occurs
      */
-    // suppress warnings generated from conversion of generic Object[] to ModelType[];
-    // this is because models.toArray(new ModelType[]) cannot be used;
-    // generic arrays can't be created for template types
     public <ModelType> ArrayList<ModelType> query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
         try {
             ResultSet resultsIter = statement.executeQuery();
@@ -214,6 +211,20 @@ public class Database implements AutoCloseable {
             throw new DatabaseException(err);
         }
     }
+
+    /**
+     * Executes the statement as a query call to the database
+     * 
+     * @param <ModelType> is the model type expected from the query
+     * @param statement is the prepared statement to execute
+     * @param resultMapper is a callback that takes a statement result and turns it into a model instance
+     * @return an ArrayList of models that matched the query
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public <ModelType> ArrayList<ModelType> query(String statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
+        return this.query(this.prepareStatement(statement), resultMapper);
+    }
+
     /**
      * The functional interface for callbacks passed to the Database.query function
      */
@@ -237,6 +248,17 @@ public class Database implements AutoCloseable {
     }
 
     /**
+     * Executes the statement as an insert/update/delete call to the database
+     * 
+     * @param statement is the prepared statement to executs
+     * @return the number of modified rows
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public int update(String statement) throws DatabaseException {
+        return this.update(this.prepareStatement(statement));
+    }
+
+    /**
      * Executes the statement in its current state
      * 
      * @param statement is the prepared statement to execute
@@ -249,6 +271,17 @@ public class Database implements AutoCloseable {
         } catch (SQLException err) {
             throw new DatabaseException(err);
         }
+    }
+
+    /**
+     * Executes the statement in its current state
+     * 
+     * @param statement is the prepared statement to execute
+     * @return the value obtained by statement.execute(); "true if the first result is a ResultSet object; false if the first result is an update count or there is no result"
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public boolean execute(String statement) throws DatabaseException {
+        return this.execute(this.prepareStatement(statement));
     }
 
     /**
