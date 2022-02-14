@@ -11,13 +11,27 @@ import java.util.ArrayList;
 public class Database implements AutoCloseable {
     /** The current connection object for the database */
     private Connection connection;
+    /** A list of PreparedStatements that need to be closed */
+    private ArrayList<PreparedStatement> openStatements;
+    /** Indicates if the testing database should be used or not */
+    private boolean useTestDB;
 
     /** 
      * Creates a database with no connection at first. The connection will be
      * checked/generated when any of the Database methods are called.
      */
     public Database() {
+        this(false);
+    }
+
+    /** 
+     * Creates a database that respects a boolean indicating whether the testing
+     * database should be used
+     */
+    public Database(boolean useTestDB) {
         this.connection = null;
+        this.openStatements = new ArrayList<>();
+        this.useTestDB = useTestDB;
     }
 
     /**
@@ -42,6 +56,10 @@ public class Database implements AutoCloseable {
     public void close() throws DatabaseException {
         if (this.connection != null) {
             try {
+                for (PreparedStatement statement : this.openStatements) {
+                    // "calling the method when it is already closed has no effect"
+                    statement.close();
+                }
                 this.connection.rollback();
                 this.connection.close();
                 this.connection = null;
@@ -49,6 +67,98 @@ public class Database implements AutoCloseable {
                 throw new DatabaseException(err);
             }
         }
+    }
+
+    /**
+     * Clears and resets all tables in the database, rolling back any current changes
+     * 
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public void reset() throws DatabaseException {
+        // ignore any pending changes
+        if (this.connection != null) {
+            this.rollback();
+        }
+
+        // generate statements
+        // TODO: figure out a way to get these into a file and load
+        //       into multiple statements (each statement can only execute
+        //       one sql statement)
+        String[] statements = {
+            // clear tables
+            "pragma foreign_keys = off",
+            "drop table if exists user",
+            "drop table if exists person",
+            "drop table if exists event",
+            "drop table if exists authtoken",
+            "drop table if exists enum_gender",
+            "pragma foreign_keys = on",
+
+            // create tables
+            "create table enum_gender(\n" + 
+            "   gender     text    not null    primary key  \n" + 
+            ")",
+
+            "insert into enum_gender(gender) values\n" + 
+            "   ('f'),\n" + 
+            "   ('m')",
+
+            "create table user (\n" + 
+            "    username	text	not null	primary key,            \n" + 
+            "    password 	text	not null,                           \n" + 
+            "    email 		text	not null,                           \n" + 
+            "    firstName	text	not null,                           \n" + 
+            "    lastName	text	not null,                           \n" + 
+            "    gender		text	not null,                           \n" + 
+            "    personID	text				unique,                 \n" + 
+            "    foreign key(gender)		references enum_gender,     \n" + 
+            "    foreign key(personID)      references person(personID) \n" + 
+            ")\n",
+
+            "create table person(\n" + 
+            "    personID			text	not null	primary key,                \n" + 
+            "    associatedUsername	text	not null,                               \n" + 
+            "    firstName			text	not null,                               \n" + 
+            "    lastName			text 	not null,                               \n" + 
+            "    gender				text	not null,                               \n" + 
+            "    fatherID			text,                                           \n" + 
+            "    motherID			text,                                           \n" + 
+            "    spouseID			text,                                           \n" + 
+            "    foreign key(gender)				references enum_gender,         \n" + 
+            "    foreign key(associatedUsername)	references user(username),      \n" + 
+            "    foreign key(fatherID)			    references person(personID),    \n" + 
+            "    foreign key(motherID)			    references person(personID),    \n" + 
+            "    foreign key(spouseID)			    references person(personID)     \n" + 
+            ")\n",
+            
+            "create table event(\n" + 
+            "    eventID				text	not null	primary key,        \n" + 
+            "    associatedUsername	    text	not null,                       \n" + 
+            "    personID			    text	not null,                       \n" + 
+            "    latitude			    real	not null,                       \n" + 
+            "    longitude			    real	not null,                       \n" + 
+            "    country				text 	not null,                       \n" + 
+            "    city				    text	not null,                       \n" + 
+            "    eventType			    text 	not null,                       \n" + 
+            "    year				    int		not null                        \n" + 
+            "        check(year > 0),                                           \n" + 
+            "    foreign key(associatedUsername)	references user(username),  \n" + 
+            "    foreign key(personID)			    references person(personID)     \n" + 
+            ")\n",
+
+            "create table authtoken(\n" + 
+            "    authtoken 	text	not null	primary key,        \n" + 
+            "    username	text	not null,                       \n" + 
+            "    foreign key(username)	references user(username)   \n" + 
+            ")\n",
+        };
+
+        // execute sql code
+        for (String statementStr : statements) {
+            PreparedStatement statement = this.prepareStatement(statementStr);
+            this.execute(statement);
+        }
+        this.commit();
     }
 
     /**
@@ -62,9 +172,9 @@ public class Database implements AutoCloseable {
     public PreparedStatement prepareStatement(String sqlToExec) throws DatabaseException {
         try {
             this.initializeConnectionIfNoneExists();
-            try (PreparedStatement statement = this.connection.prepareStatement(sqlToExec)) {
-                return statement;
-            }
+            PreparedStatement statement = this.connection.prepareStatement(sqlToExec);
+            this.openStatements.add(statement);
+            return statement;
         } catch (SQLException err) {
             throw new DatabaseException(err);
         }
@@ -76,22 +186,21 @@ public class Database implements AutoCloseable {
      * @param <ModelType> is the model type expected from the query
      * @param statement is the prepared statement to execute
      * @param resultMapper is a callback that takes a statement result and turns it into a model instance
-     * @return an array of models that matched the query
+     * @return an ArrayList of models that matched the query
      * @throws DatabaseException when a SQLException occurs
      */
     // suppress warnings generated from conversion of generic Object[] to ModelType[];
     // this is because models.toArray(new ModelType[]) cannot be used;
     // generic arrays can't be created for template types
-    @SuppressWarnings("unchecked")
-    public <ModelType> ModelType[] query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
+    public <ModelType> ArrayList<ModelType> query(PreparedStatement statement, QueryCallback<ModelType> resultMapper) throws DatabaseException {
         try {
             ResultSet resultsIter = statement.executeQuery();
-            ArrayList<ModelType> models = new ArrayList<ModelType>();
+            ArrayList<ModelType> models = new ArrayList<>();
             while (resultsIter.next()) {
                 ModelType model = resultMapper.call(resultsIter);
                 models.add(model);
             }
-            return (ModelType[]) models.toArray();
+            return models;
         } catch (SQLException err) {
             throw new DatabaseException(err);
         }
@@ -113,6 +222,21 @@ public class Database implements AutoCloseable {
     public int update(PreparedStatement statement) throws DatabaseException {
         try {
             return statement.executeUpdate();
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
+    }
+
+    /**
+     * Executes the statement in its current state
+     * 
+     * @param statement is the prepared statement to execute
+     * @return the value obtained by statement.execute(); "true if the first result is a ResultSet object; false if the first result is an update count or there is no result"
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public boolean execute(PreparedStatement statement) throws DatabaseException {
+        try {
+            return statement.execute();
         } catch (SQLException err) {
             throw new DatabaseException(err);
         }
@@ -161,7 +285,12 @@ public class Database implements AutoCloseable {
      */
     private void initializeConnectionIfNoneExists() throws SQLException {
         if (this.connection == null) {
-            String DATABASE_PATH = "jdbc:sqlite:database.sqlite";
+            String DATABASE_PATH;
+            if (this.useTestDB) {
+                DATABASE_PATH = "jdbc:sqlite:database_forTesting.sqlite";
+            } else {
+                DATABASE_PATH = "jdbc:sqlite:database.sqlite";
+            }
             this.connection = DriverManager.getConnection(DATABASE_PATH);
             // allows greater control of the transaction
             // (specifically, commit() and rollback())
