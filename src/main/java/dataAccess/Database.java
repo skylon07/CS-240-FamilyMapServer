@@ -229,7 +229,7 @@ public class Database implements AutoCloseable {
      * The functional interface for callbacks passed to the Database.query function
      */
     interface QueryCallback<ModelType> {
-        public ModelType call(ResultSet currentResult);
+        public ModelType call(ResultSet currentResult) throws SQLException, DatabaseException;
     }
 
     /**
