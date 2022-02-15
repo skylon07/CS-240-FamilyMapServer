@@ -1,5 +1,8 @@
 package dataAccess;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * A generic Accessor class that defines the base for all Accessors. It guarantees
  * basic database manupulation operations for a given model type, however subclasses
@@ -60,4 +63,13 @@ public abstract class Accessor<ModelType> {
      * @throws DatabaseException when a database error occurs
      */
     public abstract void clear() throws DatabaseException;
+
+    /**
+     * Mapping function to use for Database.query() calls
+     * 
+     * @param result is the ResultSet passed by query()
+     * @return the User given by the result
+     * @throws SQLException when the result fails to get data
+     */
+    protected abstract ModelType mapQueryResult(ResultSet result) throws SQLException;
 }
