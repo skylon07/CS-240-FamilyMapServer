@@ -357,13 +357,13 @@ public class UserAccessor extends Accessor<User> {
 
     @Override
     protected User mapQueryResult(ResultSet result) throws SQLException {
-        String username = result.getString(0);
-        String password = result.getString(1);
-        String email = result.getString(2);
-        String firstName = result.getString(3);
-        String lastName = result.getString(4);
-        String gender = result.getString(5);
-        String personID = result.getString(6);
+        String username = result.getString(1);
+        String password = result.getString(2);
+        String email = result.getString(3);
+        String firstName = result.getString(4);
+        String lastName = result.getString(5);
+        String gender = result.getString(6);
+        String personID = result.getString(7);
         User user = new User(username, password, email, firstName, lastName, gender, personID);
         return user;
     }
