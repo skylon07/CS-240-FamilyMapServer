@@ -35,7 +35,9 @@ public abstract class Accessor<ModelType> {
     public abstract void delete(ModelType[] models) throws BadAccessException, DatabaseException;
 
     /**
-     * Takes a list of models (that exist in the database) and updates their corresponding rows
+     * Takes a list of models (that exist in the database) and updates their
+     * corresponding rows, according to their primary keys (ie primary keys
+     * cannot be changed using this method)
      * 
      * @param models is the list of models to update
      * @throws BadAccessException when a model doesn't exist
@@ -47,7 +49,7 @@ public abstract class Accessor<ModelType> {
      * Takes a list of models and checks if they are present in the database tables
      * 
      * @param models is the list of models to check for
-     * @return whether the models exists or not
+     * @return whether the models each exist or not
      * @throws DatabaseException when another database error occurs
      */
     public abstract boolean[] exists(ModelType[] models) throws DatabaseException;
