@@ -32,7 +32,7 @@ public class DatabaseTest {
      * @throws DatabaseException whenever Database.reset() does
      */
     private Database createDatabase(boolean reset) throws DatabaseException {
-        Database db = new Database(true);
+        Database db = new Database();
         if (reset) {
             db.reset();
         }
@@ -47,6 +47,14 @@ public class DatabaseTest {
      */
     private Database createDatabase() throws DatabaseException {
         return this.createDatabase(true);
+    }
+
+    /**
+     * Signals the Database class to use the testing database for testing
+     */
+    @BeforeAll
+    static public void useTestDB() {
+        Database.useTestDB();
     }
     
     /**

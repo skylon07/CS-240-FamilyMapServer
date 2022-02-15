@@ -9,29 +9,25 @@ import java.util.ArrayList;
  * as possible) about directly handling JDBC data types
  */
 public class Database implements AutoCloseable {
+    /** Indicates if the testing database should be used or not */
+    static private boolean shouldUseTestDB;
+
+    static public void useTestDB() {
+        Database.shouldUseTestDB = true;
+    }
+
     /** The current connection object for the database */
     private Connection connection;
     /** A list of PreparedStatements that need to be closed */
     private ArrayList<PreparedStatement> openStatements;
-    /** Indicates if the testing database should be used or not */
-    private boolean useTestDB;
 
     /** 
      * Creates a database with no connection at first. The connection will be
      * checked/generated when any of the Database methods are called.
      */
     public Database() {
-        this(false);
-    }
-
-    /** 
-     * Creates a database that respects a boolean indicating whether the testing
-     * database should be used
-     */
-    public Database(boolean useTestDB) {
         this.connection = null;
         this.openStatements = new ArrayList<>();
-        this.useTestDB = useTestDB;
     }
 
     /**
@@ -328,7 +324,7 @@ public class Database implements AutoCloseable {
     private void initializeConnectionIfNoneExists() throws SQLException {
         if (this.connection == null) {
             String DATABASE_PATH;
-            if (this.useTestDB) {
+            if (Database.shouldUseTestDB) {
                 DATABASE_PATH = "jdbc:sqlite:database_forTesting.sqlite";
             } else {
                 DATABASE_PATH = "jdbc:sqlite:database.sqlite";
