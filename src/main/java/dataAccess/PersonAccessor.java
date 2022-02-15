@@ -1,5 +1,8 @@
 package dataAccess;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import models.Person;
 
 /**
@@ -7,32 +10,6 @@ import models.Person;
  * It can create, delete, update, and find Persons using a variety of methods.
  */
 public class PersonAccessor extends Accessor<Person> {
-    @Override
-    public void create(Person[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void delete(Person[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void update(Person[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public boolean[] exists(Person[] model) throws DatabaseException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void clear() throws DatabaseException {
-        // TODO Auto-generated method stub   
-    }
-
     /**
      * Returns the Person matching a Person ID
      * 
@@ -53,6 +30,38 @@ public class PersonAccessor extends Accessor<Person> {
      */
     public Person[] getAll() throws DatabaseException {
         // TODO
+        return null;
+    }
+    
+    @Override
+    public void create(Person[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void delete(Person[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void update(Person[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean[] exists(Person[] models) throws DatabaseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
+    @Override
+    protected Person mapQueryResult(ResultSet result) throws SQLException {
+        // TODO Auto-generated method stub
         return null;
     }
 }

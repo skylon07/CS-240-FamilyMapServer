@@ -1,5 +1,8 @@
 package dataAccess;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import models.Event;
 
 /**
@@ -7,32 +10,6 @@ import models.Event;
  * It can create, delete, update, and find Events using a variety of methods.
  */
 public class EventAccessor extends Accessor<Event> {
-    @Override
-    public void create(Event[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void delete(Event[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void update(Event[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public boolean[] exists(Event[] model) throws DatabaseException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void clear() throws DatabaseException {
-        // TODO Auto-generated method stub   
-    }
-
     /**
      * Returns the Event matching an Event ID
      * 
@@ -53,6 +30,38 @@ public class EventAccessor extends Accessor<Event> {
      */
     public Event[] getAll() throws DatabaseException {
         // TODO
+        return null;
+    }
+
+    @Override
+    public void create(Event[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void delete(Event[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void update(Event[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean[] exists(Event[] models) throws DatabaseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
+    @Override
+    protected Event mapQueryResult(ResultSet result) throws SQLException {
+        // TODO Auto-generated method stub
         return null;
     }
 }

@@ -1,5 +1,8 @@
 package dataAccess;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import models.AuthToken;
 
 /**
@@ -7,32 +10,6 @@ import models.AuthToken;
  * It can create, delete, update, and find AuthTokens using a variety of methods.
  */
 public class AuthTokenAccessor extends Accessor<AuthToken> {
-    @Override
-     public void create(AuthToken[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void delete(AuthToken[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void update(AuthToken[] model) throws BadAccessException, DatabaseException {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public boolean[] exists(AuthToken[] model) throws DatabaseException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void clear() throws DatabaseException {
-        // TODO Auto-generated method stub   
-    }
-
     /**
      * Gets the authentication token tied to a User
      * 
@@ -42,6 +19,38 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
      */
     public AuthToken getByUsername(String username) throws DatabaseException {
         // TODO
+        return null;
+    }
+    
+    @Override
+     public void create(AuthToken[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void delete(AuthToken[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void update(AuthToken[] models) throws BadAccessException, DatabaseException {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean[] exists(AuthToken[] models) throws DatabaseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        // TODO Auto-generated method stub   
+    }
+
+    @Override
+    protected AuthToken mapQueryResult(ResultSet result) throws SQLException {
+        // TODO Auto-generated method stub
         return null;
     }
 }
