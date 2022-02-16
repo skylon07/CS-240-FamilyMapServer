@@ -125,7 +125,7 @@ public class UserAccessor extends Accessor<User> {
                 statement.setString(emailIdx, user.getEmail());
                 statement.setString(firstnameIdx, user.getFirstName());
                 statement.setString(lastnameIdx, user.getLastName());
-                statement.setString(genderIdx, user.getLastName());
+                statement.setString(genderIdx, user.getGender());
                 statement.setString(personIDIdx, user.getPersonID());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
