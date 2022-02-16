@@ -267,7 +267,7 @@ public class UserAccessor extends Accessor<User> {
         for (int userIdx = 0; userIdx < models.length; ++userIdx) {
             User user = models[userIdx];
 
-            int numFieldsPerWhen = 2; // username == ? then ?
+            int numFieldsPerWhen = 2; // when username == ? then ?
             int numFieldsPerProp = models.length * numFieldsPerWhen;
             int whenPasswordIdx     = 0 * numFieldsPerProp + userIdx * numFieldsPerWhen + 1;
             int whenEmailIdx        = 1 * numFieldsPerProp + userIdx * numFieldsPerWhen + 1;
@@ -298,13 +298,6 @@ public class UserAccessor extends Accessor<User> {
 
         this.database.update(statement);
         this.database.commit();
-    }
-
-    @Override
-    public void clear() throws DatabaseException {
-        String sqlStr = "delete from user";
-        this.database.update(sqlStr);
-        this.database.commit(); 
     }
 
     @Override
@@ -353,6 +346,13 @@ public class UserAccessor extends Accessor<User> {
             }
         }
         return exists;
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        String sqlStr = "delete from user";
+        this.database.update(sqlStr);
+        this.database.commit(); 
     }
 
     @Override
