@@ -295,18 +295,71 @@ public class PersonAccessor extends Accessor<Person> {
 
     @Override
     public boolean[] exists(Person[] models) throws DatabaseException {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sqlStr = new StringBuilder();
+        sqlStr.append("select personID from person where\n");
+        boolean firstPerson = true;
+        for (int i = 0; i < models.length; ++i) {
+            if (!firstPerson) {
+                sqlStr.append(" or ");
+            }
+            sqlStr.append("personID == ?");
+            firstPerson = false;
+        }
+
+        PreparedStatement statement = this.database.prepareStatement(sqlStr.toString());
+        for (int personIdx = 0; personIdx < models.length; ++personIdx) {
+            Person person = models[personIdx];
+            
+            int numFields = 1;
+            int personIDIdx = personIdx * numFields + 1;
+
+            try {
+                statement.setString(personIDIdx, person.getPersonID());
+            } catch (SQLException err) {
+                throw new DatabaseException(err);
+            }
+        }
+
+        boolean[] exists = new boolean[models.length];
+        for (int personIdx = 0; personIdx < models.length; ++personIdx) {
+            exists[personIdx] = false;
+        }
+        ArrayList<String> existingPersonIDs = this.database.query(statement, (result) -> result.getString(1));
+        for (String personID : existingPersonIDs) {
+            int personExistsIdx = -1;
+            for (int personIdx = 0; personIdx < models.length; ++personIdx) {
+                Person person = models[personIdx];
+                if (person.getPersonID().equals(personID)) {
+                    personExistsIdx = personIdx;
+                    break;
+                }
+            }
+            if (personExistsIdx != -1) {
+                exists[personExistsIdx] = true;
+            }
+        }
+        return exists;
     }
 
     @Override
     public void clear() throws DatabaseException {
-        // TODO Auto-generated method stub   
+        String sqlStr = "delete from person";
+        this.database.update(sqlStr);
+        this.database.commit();   
     }
 
     @Override
     protected Person mapQueryResult(ResultSet result) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        String personID = result.getString(1);
+        String associatedUsername = result.getString(2);
+        String firstName = result.getString(3);
+        String lastName = result.getString(4);
+        String gender = result.getString(5);
+        String fatherID = result.getString(6);
+        String motherID = result.getString(7);
+        String spouseID = result.getString(8);
+        Person person = new Person(personID, associatedUsername, firstName, lastName,
+                                   gender, fatherID, motherID, spouseID);
+        return person;
     }
 }

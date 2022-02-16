@@ -352,7 +352,7 @@ public class UserAccessor extends Accessor<User> {
     public void clear() throws DatabaseException {
         String sqlStr = "delete from user";
         this.database.update(sqlStr);
-        this.database.commit(); 
+        this.database.commit();
     }
 
     @Override
