@@ -325,7 +325,7 @@ public class UserAccessor extends Accessor<User> {
             User user = models[userIdx];
             
             int numFields = 1;
-            int usernameIdx = userIdx * numFields + 0;
+            int usernameIdx = userIdx * numFields + 1;
 
             try {
                 statement.setString(usernameIdx, user.getUsername());
@@ -338,12 +338,12 @@ public class UserAccessor extends Accessor<User> {
         for (int userIdx = 0; userIdx < models.length; ++userIdx) {
             exists[userIdx] = false;
         }
-        ArrayList<String> existingUsernames = this.database.query(statement, (result) -> result.getString(0));
+        ArrayList<String> existingUsernames = this.database.query(statement, (result) -> result.getString(1));
         for (String username : existingUsernames) {
             int userExistsIdx = -1;
             for (int userIdx = 0; userIdx < models.length; ++userIdx) {
                 User user = models[userIdx];
-                if (user.getUsername() == username) {
+                if (user.getUsername().equals(username)) {
                     userExistsIdx = userIdx;
                     break;
                 }
