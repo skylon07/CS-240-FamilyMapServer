@@ -175,7 +175,7 @@ public class UserAccessor extends Accessor<User> {
             User user = models[userIdx];
             
             int numFields = 1;
-            int usernameIdx = userIdx * numFields + 0;
+            int usernameIdx = userIdx * numFields + 1;
 
             try {
                 statement.setString(usernameIdx, user.getUsername());
