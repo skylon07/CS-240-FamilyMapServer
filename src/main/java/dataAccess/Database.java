@@ -3,6 +3,8 @@ package dataAccess;
 import java.sql.*;
 import java.util.ArrayList;
 
+import org.sqlite.SQLiteConfig;
+
 /**
  * This is the main interface to the SQLite database. This layer of abstraction
  * allows accessors to modify/query the database without worrying (as much
@@ -82,13 +84,11 @@ public class Database implements AutoCloseable {
         //       one sql statement)
         String[] statements = {
             // clear tables
-            "pragma foreign_keys = off",
             "drop table if exists user",
             "drop table if exists person",
             "drop table if exists event",
             "drop table if exists authtoken",
             "drop table if exists enum_gender",
-            "pragma foreign_keys = on",
 
             // create tables
             "create table enum_gender(\n" + 
@@ -150,11 +150,20 @@ public class Database implements AutoCloseable {
         };
 
         // execute sql code
-        for (String statementStr : statements) {
-            PreparedStatement statement = this.prepareStatement(statementStr);
-            this.execute(statement);
+        Connection oldConnection = this.connection;
+        // ignore foreign keys to allow dropping tables
+        try (Connection connection = this.createConnection(false)) {
+            this.connection = connection;
+            for (String statementStr : statements) {
+                PreparedStatement statement = this.prepareStatement(statementStr);
+                this.execute(statement);
+            }
+            this.commit();
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        } finally {
+            this.connection = oldConnection;
         }
-        this.commit();
     }
 
     /**
@@ -323,16 +332,30 @@ public class Database implements AutoCloseable {
      */
     private void initializeConnectionIfNoneExists() throws SQLException {
         if (this.connection == null) {
-            String DATABASE_PATH;
-            if (Database.shouldUseTestDB) {
-                DATABASE_PATH = "jdbc:sqlite:database_forTesting.sqlite";
-            } else {
-                DATABASE_PATH = "jdbc:sqlite:database.sqlite";
-            }
-            this.connection = DriverManager.getConnection(DATABASE_PATH);
-            // allows greater control of the transaction
-            // (specifically, commit() and rollback())
-            this.connection.setAutoCommit(false);
+            this.connection = this.createConnection(true);
         }
+    }
+
+    /**
+     * The generic algorithm for creating a connection for FamilyMap
+     * 
+     * @param enforceForeignKeys indicates if foreign keys should be respected
+     * @return the new connection (don't forget to close it!)
+     * @throws SQLException if the DriverManager cannot create a connection
+     */
+    private Connection createConnection(boolean enforceForeignKeys) throws SQLException {
+        String DATABASE_PATH;
+        if (Database.shouldUseTestDB) {
+            DATABASE_PATH = "jdbc:sqlite:database_forTesting.sqlite";
+        } else {
+            DATABASE_PATH = "jdbc:sqlite:database.sqlite";
+        }
+        SQLiteConfig config = new SQLiteConfig();
+        config.enforceForeignKeys(enforceForeignKeys);
+        Connection connection = DriverManager.getConnection(DATABASE_PATH, config.toProperties());
+        // allows greater control of the transaction
+        // (specifically, commit() and rollback())
+        connection.setAutoCommit(false);
+        return connection;
     }
 }

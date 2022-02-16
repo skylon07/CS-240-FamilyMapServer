@@ -125,7 +125,7 @@ public class DatabaseTest {
         try (Database database = this.createDatabase(false)) {
             assertNull(database.getActiveConnection());
             database.reset();
-            assertNotNull(database.getActiveConnection());
+            assertNull(database.getActiveConnection());
             database.close();
             assertNull(database.getActiveConnection());
         } catch (Exception err) {
