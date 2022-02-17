@@ -1,5 +1,7 @@
 package services;
 
+import dataAccess.Database;
+
 import services.requests.FillRequest;
 import services.responses.FillResponse;
 
@@ -17,7 +19,7 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
     }
 
     @Override
-    public FillResponse onPost(FillRequest request) throws InvalidHTTPMethodException {
+    public FillResponse onPost(FillRequest request, Database database) throws InvalidHTTPMethodException {
         // TODO Auto-generated method stub
         return null;
     }

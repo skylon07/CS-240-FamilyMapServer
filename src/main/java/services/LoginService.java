@@ -1,5 +1,7 @@
 package services;
 
+import dataAccess.Database;
+
 import services.requests.LoginRequest;
 import services.responses.LoginResponse;
 
@@ -17,7 +19,7 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
     }
 
     @Override
-    public LoginResponse onPost(LoginRequest request) throws InvalidHTTPMethodException {
+    public LoginResponse onPost(LoginRequest request, Database database) throws InvalidHTTPMethodException {
         // TODO Auto-generated method stub
         return null;
     }

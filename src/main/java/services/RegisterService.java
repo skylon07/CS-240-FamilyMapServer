@@ -1,5 +1,7 @@
 package services;
 
+import dataAccess.Database;
+
 import services.requests.RegisterRequest;
 import services.responses.RegisterResponse;
 
@@ -17,7 +19,7 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
     }
 
     @Override
-    public RegisterResponse onPost(RegisterRequest request) throws InvalidHTTPMethodException {
+    public RegisterResponse onPost(RegisterRequest request, Database database) throws InvalidHTTPMethodException {
         // TODO Auto-generated method stub
         return null;
     }

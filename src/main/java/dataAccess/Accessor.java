@@ -14,6 +14,8 @@ public abstract class Accessor<ModelType> {
 
     /**
      * Creation process for all Accessors
+     * 
+     * @param database is the database the Accessor should use
      */
     public Accessor(Database database) {
         this.database = database;
