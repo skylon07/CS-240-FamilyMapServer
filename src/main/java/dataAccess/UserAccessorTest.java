@@ -410,7 +410,6 @@ public class UserAccessorTest {
 
             results = accessor.getAll();
             assertEquals(1, results.length);
-             
         } catch (BadAccessException err) {
             this.failNoTraceback(err);
         } catch (DatabaseException err) {

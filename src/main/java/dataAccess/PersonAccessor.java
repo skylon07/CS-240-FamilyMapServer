@@ -237,8 +237,8 @@ public class PersonAccessor extends Accessor<Person> {
         firstnameStr.append("else firstname end,\n");
         lastnameStr.append("else lastname end,\n");
         genderStr.append("else gender end,\n");
-        fatherIDStr.append("else fatherID end\n");
-        motherIDStr.append("else motherID end\n");
+        fatherIDStr.append("else fatherID end,\n");
+        motherIDStr.append("else motherID end,\n");
         spouseIDStr.append("else spouseID end\n");
         whereClauseStr.append(")\n");
 
