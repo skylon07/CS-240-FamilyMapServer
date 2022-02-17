@@ -14,6 +14,15 @@ import models.Person;
  */
 public class PersonAccessor extends Accessor<Person> {
     /**
+     * Creates a PersonAccessor with a given database
+     * 
+     * @param database is the database to use
+     */
+    public PersonAccessor(Database database) {
+        super(database);
+    }
+
+    /**
      * Returns the Person matching a Person ID
      * 
      * @param personID is the Person ID to query by
@@ -117,7 +126,6 @@ public class PersonAccessor extends Accessor<Person> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override
@@ -169,7 +177,6 @@ public class PersonAccessor extends Accessor<Person> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override
@@ -290,7 +297,6 @@ public class PersonAccessor extends Accessor<Person> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override

@@ -123,7 +123,8 @@ public class UserAccessorTest {
     @DisplayName("Get existing users test -- by username")
     public void testGetExistingUserByUsername() {
         this.fillUsers();
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User benUser = accessor.getByUsername("BenHanson");
             assertEquals("BenHanson",       benUser.getUsername());
             assertEquals("bens password",   benUser.getPassword());
@@ -144,7 +145,8 @@ public class UserAccessorTest {
     @DisplayName("Get non-existing users test -- by username")
     public void testGetNonExistingUserByUsername() {
         this.fillUsers();
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User bensBrotherUser = accessor.getByUsername("BenHansonsBrotherWhoDoesntExist");
             assertNull(bensBrotherUser);
         } catch (DatabaseException err) {
@@ -159,7 +161,8 @@ public class UserAccessorTest {
     @DisplayName("Get existing users test -- by email")
     public void testGetExistingUsersByEmail() {
         this.fillUsers();
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] benUsers = accessor.getByEmail("ben@email.test");
             assertEquals(2, benUsers.length);
             // no order is (necessarily) defined to the results
@@ -206,7 +209,8 @@ public class UserAccessorTest {
     @DisplayName("Get non-existing users test -- by email")
     public void testGetNonExistingUsersByEmail() {
         this.fillUsers();
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] bensBrotherUsers = accessor.getByEmail("bensBrotherWhoDoesntExist@email.test");
             assertEquals(0, bensBrotherUsers.length);
         } catch (DatabaseException err) {
@@ -221,7 +225,8 @@ public class UserAccessorTest {
     @DisplayName("Get all existing users test -- with filled data")
     public void testGetAllUsers() {
         this.fillUsers();
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] allUsers = accessor.getAll();
             assertNotEquals(0, allUsers.length);
             // no order is (necessarily) defined to the results
@@ -280,7 +285,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Get all existing users test -- with no data")
     public void testGetAllUsersWhenEmpty() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] allUsers = accessor.getAll();
             assertEquals(0, allUsers.length);
         } catch (DatabaseException err) {
@@ -294,7 +300,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Check users exist test")
     public void testCheckExists() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m");
             this.insertUser("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f");
             
@@ -317,7 +324,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Check users exist test -- empty database")
     public void testCheckExistsWithEmptyDB() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User ben = new User("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m", null);
             User sally = new User("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f", null);
             User chaz = new User("chazzyboi", "password123", "chaz@email.test", "Chaz", "Chaz", "m", null);
@@ -337,7 +345,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Create new users test")
     public void testCreateNewUsers() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] results = accessor.getAll();
             assertEquals(0, results.length);
             
@@ -345,6 +354,7 @@ public class UserAccessorTest {
             User sally = new User("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f", null);
             User[] users = {ben, sally};
             accessor.create(users);
+            
 
             results = accessor.getAll();
             assertEquals(2, results.length);
@@ -361,7 +371,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Create new users test -- error on re-create")
     public void testCreateNewUsersErrors() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             User[] results = accessor.getAll();
             assertEquals(0, results.length);
             
@@ -395,7 +406,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Delete users test")
     public void testDeleteUsers() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m");
             this.insertUser("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f");
             this.insertUser("someotherguy", "guy password", "guy@email.test", "Guy", "Dude", "m");
@@ -423,7 +435,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Delete users test -- users don't exist")
     public void testDeleteUsersErrors() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("someotherguy", "guy password", "guy@email.test", "Guy", "Dude", "m");
             
             User ben = new User("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m", null);
@@ -450,7 +463,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Update users test")
     public void testUpdateUsers() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m");
             this.insertUser("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f");
             this.insertUser("someotherguy", "guy password", "guy@email.test", "Guy", "Dude", "m");
@@ -491,7 +505,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Update users test -- users don't exist")
     public void testUpdateUsersErrors() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("someotherguy", "guy password", "guy@email.test", "Guy", "Dude", "m");
             
             User ben = new User("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m", null);
@@ -522,7 +537,8 @@ public class UserAccessorTest {
     @Test
     @DisplayName("Clear user table test")
     public void testClearUsers() {
-        try (UserAccessor accessor = new UserAccessor()) {
+        try (Database database = new Database()) {
+            UserAccessor accessor = new UserAccessor(database);
             this.insertUser("benguy", "bens password", "ben@email.test", "Ben", "Guy", "m");
             this.insertUser("sallydudette", "sallys password", "sally@email.test", "Sally", "Gally", "f");
             this.insertUser("someotherguy", "guy password", "guy@email.test", "Guy", "Dude", "m");

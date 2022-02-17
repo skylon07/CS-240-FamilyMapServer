@@ -11,6 +11,15 @@ import models.Event;
  */
 public class EventAccessor extends Accessor<Event> {
     /**
+     * Creates an EventAccessor with a given database
+     * 
+     * @param database is the database to use
+     */
+    public EventAccessor(Database database) {
+        super(database);
+    }
+
+    /**
      * Returns the Event matching an Event ID
      * 
      * @param eventID is the Event ID to query by

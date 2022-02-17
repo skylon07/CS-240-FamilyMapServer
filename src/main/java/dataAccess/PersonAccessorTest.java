@@ -103,7 +103,8 @@ public class PersonAccessorTest {
     @DisplayName("Get existing people test -- by personID")
     public void testGetExistingPersonByPersonID() {
         this.fillPersons();
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person benPerson = accessor.getByID("benID1");
             assertEquals("benID1",  benPerson.getPersonID());
             assertEquals("Ben",     benPerson.getFirstName());
@@ -121,7 +122,8 @@ public class PersonAccessorTest {
     @DisplayName("Get non-existing people test -- by personID")
     public void testGetNonExistingPersonByPersonID() {
         this.fillPersons();
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person bensBrotherPerson = accessor.getByID("BenHansonsBrotherWhoDoesntExist");
             assertNull(bensBrotherPerson);
         } catch (DatabaseException err) {
@@ -136,7 +138,8 @@ public class PersonAccessorTest {
     @DisplayName("Get all existing people test -- with filled data")
     public void testGetAllPeople() {
         this.fillPersons();
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person[] allPeople = accessor.getAll();
             assertNotEquals(0, allPeople.length);
             // no order is (necessarily) defined to the results
@@ -186,7 +189,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Get all existing people test -- with no data")
     public void testGetAllPeopleWhenEmpty() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person[] allPeople = accessor.getAll();
             assertEquals(0, allPeople.length);
         } catch (DatabaseException err) {
@@ -200,7 +204,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Check people exist test")
     public void testCheckExists() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("benID1", "Ben", "Hanson", "m");
             this.insertPerson("sallyID", "Sally", "Hendricks", "f");
             
@@ -223,7 +228,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Check people exist test -- empty database")
     public void testCheckExistsWithEmptyDB() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person ben = new Person("benID1", "baseUser", "Ben", "Hanson", "m");
             Person sally = new Person("sallyID", "baseUser", "Sally", "Hendricks", "f");
             Person chaz = new Person("chazID", "baseUser", "Chaz", "Shmaz", "m");
@@ -243,7 +249,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Create new people test")
     public void testCreateNewPeople() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person[] results = accessor.getAll();
             assertEquals(0, results.length);
             
@@ -267,7 +274,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Create new people test -- error on re-create")
     public void testCreateNewPeopleErrors() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             Person[] results = accessor.getAll();
             assertEquals(0, results.length);
             
@@ -301,7 +309,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Delete people test")
     public void testDeletePeople() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("benID1", "Ben", "Hanson", "m");
             this.insertPerson("sallyID", "Sally", "Hendricks", "f");
             this.insertPerson("guyID", "Guy", "Dude", "m");
@@ -329,7 +338,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Delete people test -- people don't exist")
     public void testDeletePeopleErrors() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("guyID", "Guy", "Dude", "m");
             
             Person ben = new Person("benID1", "baseUser", "Ben", "Hanson", "m");
@@ -356,7 +366,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Update people test")
     public void testUpdatePeople() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("benID1", "Ben", "Hanson", "m");
             this.insertPerson("sallyID", "Sally", "Hendricks", "f");
             this.insertPerson("guyID", "Guy", "Dude", "m");
@@ -397,7 +408,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Update people test -- people don't exist")
     public void testUpdatePeopleErrors() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("guyID", "Guy", "Dude", "m");
             
             Person ben = new Person("benID1", "baseUser", "Ben", "Hanson", "m");
@@ -428,7 +440,8 @@ public class PersonAccessorTest {
     @Test
     @DisplayName("Clear person table test")
     public void testClearPeople() {
-        try (PersonAccessor accessor = new PersonAccessor()) {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
             this.insertPerson("benID1", "Ben", "Hanson", "m");
             this.insertPerson("sallyID", "Sally", "Hendricks", "f");
             this.insertPerson("guyID", "Guy", "Dude", "m");

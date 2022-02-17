@@ -14,6 +14,15 @@ import models.User;
  */
 public class UserAccessor extends Accessor<User> {
     /**
+     * Creates a UserAccessor with a given database
+     * 
+     * @param database is the database to use
+     */
+    public UserAccessor(Database database) {
+        super(database);
+    }
+    
+    /**
      * Returns the User matching a username
      * 
      * @param username is the username to query by
@@ -133,7 +142,6 @@ public class UserAccessor extends Accessor<User> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override
@@ -185,7 +193,6 @@ public class UserAccessor extends Accessor<User> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override
@@ -297,7 +304,6 @@ public class UserAccessor extends Accessor<User> {
         }
 
         this.database.update(statement);
-        this.database.commit();
     }
 
     @Override
@@ -352,7 +358,6 @@ public class UserAccessor extends Accessor<User> {
     public void clear() throws DatabaseException {
         String sqlStr = "delete from user";
         this.database.update(sqlStr);
-        this.database.commit();
     }
 
     @Override

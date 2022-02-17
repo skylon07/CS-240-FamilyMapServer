@@ -11,6 +11,15 @@ import models.AuthToken;
  */
 public class AuthTokenAccessor extends Accessor<AuthToken> {
     /**
+     * Creates an AuthTokenAccessor with a given database
+     * 
+     * @param database is the database to use
+     */
+    public AuthTokenAccessor(Database database) {
+        super(database);
+    }
+
+    /**
      * Gets the authentication token tied to a User
      * 
      * @param username is the username of the User to query by
