@@ -2,7 +2,7 @@ package utils;
 
 import dataAccess.Database;
 
-abstract class GenericUtility {
+public abstract class GenericUtility {
     /** The database wrapper, allowing Utilities to create Accessors */
     protected Database database;
 
