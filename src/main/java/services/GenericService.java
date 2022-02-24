@@ -7,7 +7,7 @@ import dataAccess.DatabaseException;
  * A definition of "required" methods for all services. It also contains helpful
  * utility functions that are shared across many types of services.
  */
-abstract class GenericService<RequestType, ResponseType> {
+public abstract class GenericService<RequestType, ResponseType> {
     /** A string to help identify the service (primarily used for error messages) */
     private String serviceName;
 

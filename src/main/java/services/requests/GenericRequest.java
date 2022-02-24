@@ -7,6 +7,6 @@ package services.requests;
  * 
  * Note that all requests should be read-only (only have getters for properties)
  */
-abstract class GenericRequest {
+public abstract class GenericRequest {
     // this block intentionally left blank
 }
