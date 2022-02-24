@@ -21,7 +21,7 @@ public class Server {
         try {
             this.server = HttpServer.create(
                 new InetSocketAddress(Integer.parseInt(portNumber)),
-                MAX_WAITING_CONNECTIONS
+                Server.MAX_WAITING_CONNECTIONS
             );
         } catch (IOException err) {
             System.out.println("Server failed to initialize:");
