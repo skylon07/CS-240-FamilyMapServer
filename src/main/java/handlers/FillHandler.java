@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.FillService;
+import services.requests.FillRequest;
+import services.responses.FillResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class FillHandler extends GenericHandler {
+public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<FillRequest> getBoundRequestClass() {
+        return FillRequest.class;
+    }
+
+    @Override
+    protected FillService createBoundService() {
+        return new FillService();
     }
 }

@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.RegisterService;
+import services.requests.RegisterRequest;
+import services.responses.RegisterResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class RegisterHandler extends GenericHandler {
+public class RegisterHandler extends GenericHandler<RegisterRequest, RegisterResponse, RegisterService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<RegisterRequest> getBoundRequestClass() {
+        return RegisterRequest.class;
+    }
+
+    @Override
+    protected RegisterService createBoundService() {
+        return new RegisterService();
     }
 }

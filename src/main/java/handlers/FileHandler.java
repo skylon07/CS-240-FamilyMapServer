@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.FileService;
+import services.requests.FileRequest;
+import services.responses.FileResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class FileHandler extends GenericHandler {
+public class FileHandler extends GenericHandler<FileRequest, FileResponse, FileService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub     
+    protected Class<FileRequest> getBoundRequestClass() {
+        return FileRequest.class;
+    }
+
+    @Override
+    protected FileService createBoundService() {
+        return new FileService();
     }
 }

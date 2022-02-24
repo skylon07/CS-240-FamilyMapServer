@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.LoadService;
+import services.requests.LoadRequest;
+import services.responses.LoadResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class LoadHandler extends GenericHandler {
+public class LoadHandler extends GenericHandler<LoadRequest, LoadResponse, LoadService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<LoadRequest> getBoundRequestClass() {
+        return LoadRequest.class;
+    }
+
+    @Override
+    protected LoadService createBoundService() {
+        return new LoadService();
     }
 }

@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.EventService;
+import services.requests.EventRequest;
+import services.responses.EventResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class EventHandler extends GenericHandler {
+public class EventHandler extends GenericHandler<EventRequest, EventResponse, EventService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<EventRequest> getBoundRequestClass() {
+        return EventRequest.class;
+    }
+
+    @Override
+    protected EventService createBoundService() {
+        return new EventService();
     }
 }

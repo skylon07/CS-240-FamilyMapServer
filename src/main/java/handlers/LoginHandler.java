@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.LoginService;
+import services.requests.LoginRequest;
+import services.responses.LoginResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class LoginHandler extends GenericHandler {
+public class LoginHandler extends GenericHandler<LoginRequest, LoginResponse, LoginService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<LoginRequest> getBoundRequestClass() {
+        return LoginRequest.class;
+    }
+
+    @Override
+    protected LoginService createBoundService() {
+        return new LoginService();
     }
 }

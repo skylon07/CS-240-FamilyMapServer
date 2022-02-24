@@ -1,12 +1,17 @@
 package handlers;
 
-import java.io.IOException;
+import services.PersonService;
+import services.requests.PersonRequest;
+import services.responses.PersonResponse;
 
-import com.sun.net.httpserver.HttpExchange;
-
-public class PersonHandler extends GenericHandler {
+public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse, PersonService> {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // TODO Auto-generated method stub
+    protected Class<PersonRequest> getBoundRequestClass() {
+        return PersonRequest.class;
+    }
+
+    @Override
+    protected PersonService createBoundService() {
+        return new PersonService();
     }
 }
