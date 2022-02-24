@@ -1,13 +1,15 @@
 package handlers;
 
+import com.sun.net.httpserver.*;
+
 import services.FileService;
 import services.requests.FileRequest;
 import services.responses.FileResponse;
 
 public class FileHandler extends GenericHandler<FileRequest, FileResponse, FileService> {
     @Override
-    protected Class<FileRequest> getBoundRequestClass() {
-        return FileRequest.class;
+    protected FileRequest parseRequest(HttpExchange exchange) {
+        return null; // TODO
     }
 
     @Override

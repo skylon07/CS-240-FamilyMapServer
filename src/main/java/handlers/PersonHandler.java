@@ -1,13 +1,15 @@
 package handlers;
 
+import com.sun.net.httpserver.*;
+
 import services.PersonService;
 import services.requests.PersonRequest;
 import services.responses.PersonResponse;
 
 public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse, PersonService> {
     @Override
-    protected Class<PersonRequest> getBoundRequestClass() {
-        return PersonRequest.class;
+    protected PersonRequest parseRequest(HttpExchange exchange) {
+        return null; // TODO
     }
 
     @Override
