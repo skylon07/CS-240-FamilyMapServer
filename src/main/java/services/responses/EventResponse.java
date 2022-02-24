@@ -2,6 +2,8 @@ package services.responses;
 
 /** Contains response data returned by the EventService */
 public class EventResponse extends GenericResponse {
+    /** The JSON String representing the list of all Events (for "all" requests) */
+    public String data;
     /** The "eventID" property of the target Event */
     public String eventID;
     /** The "associatedUsername" property of the target Event */

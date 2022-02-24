@@ -4,4 +4,6 @@ package services.requests;
 public class PersonRequest extends AuthorizedRequest {
     /** The Person ID of the target Person */
     public String personID;
+    /** An indication that all Persons should be returned instead of just one */
+    boolean all;
 }
