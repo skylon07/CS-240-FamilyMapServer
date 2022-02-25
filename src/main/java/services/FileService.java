@@ -72,4 +72,9 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         response.message = errMsg;
         return response;
     }
+
+    @Override
+    protected FileResponse createSpecificErrorResponse(String errMsg) {
+        return new FileResponse();
+    }
 }
