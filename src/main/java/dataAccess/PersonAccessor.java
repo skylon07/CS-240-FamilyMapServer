@@ -112,14 +112,14 @@ public class PersonAccessor extends Accessor<Person> {
             int spouseIDIdx             = personIdx * numFields + 8;
 
             try {
-                statement.setString(personIDIdx, person.getPersonID());
-                statement.setString(associatedUsernameIdx, person.getAssociatedUsername());
-                statement.setString(firstnameIdx, person.getFirstName());
-                statement.setString(lastnameIdx, person.getLastName());
-                statement.setString(genderIdx, person.getGender());
-                statement.setString(fatherIDIdx, person.getFatherID());
-                statement.setString(motherIDIdx, person.getMotherID());
-                statement.setString(spouseIDIdx, person.getSpouseID());
+                statement.setString(personIDIdx,            person.getPersonID());
+                statement.setString(associatedUsernameIdx,  person.getAssociatedUsername());
+                statement.setString(firstnameIdx,           person.getFirstName());
+                statement.setString(lastnameIdx,            person.getLastName());
+                statement.setString(genderIdx,              person.getGender());
+                statement.setString(fatherIDIdx,            person.getFatherID());
+                statement.setString(motherIDIdx,            person.getMotherID());
+                statement.setString(spouseIDIdx,            person.getSpouseID());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }
@@ -276,21 +276,21 @@ public class PersonAccessor extends Accessor<Person> {
             int whereClauseIdx              = 7 * numFieldsPerProp + personIdx + 1;
 
             try {
-                statement.setString(whenAssociatedUsernameIdx, person.getPersonID());
-                statement.setString(whenAssociatedUsernameIdx + 1, person.getAssociatedUsername());
-                statement.setString(whenFirstnameIdx, person.getPersonID());
-                statement.setString(whenFirstnameIdx + 1, person.getFirstName());
-                statement.setString(whenLastnameIdx, person.getPersonID());
-                statement.setString(whenLastnameIdx + 1, person.getLastName());
-                statement.setString(whenGenderIdx, person.getPersonID());
-                statement.setString(whenGenderIdx + 1, person.getGender());
-                statement.setString(whenFatherIDIdx, person.getPersonID());
-                statement.setString(whenFatherIDIdx + 1, person.getFatherID());
-                statement.setString(whenMotherIDIdx, person.getPersonID());
-                statement.setString(whenMotherIDIdx + 1, person.getMotherID());
-                statement.setString(whenSpouseIDIdx, person.getPersonID());
-                statement.setString(whenSpouseIDIdx + 1, person.getSpouseID());
-                statement.setString(whereClauseIdx, person.getPersonID());
+                statement.setString(whenAssociatedUsernameIdx,      person.getPersonID());
+                statement.setString(whenAssociatedUsernameIdx + 1,  person.getAssociatedUsername());
+                statement.setString(whenFirstnameIdx,               person.getPersonID());
+                statement.setString(whenFirstnameIdx + 1,           person.getFirstName());
+                statement.setString(whenLastnameIdx,                person.getPersonID());
+                statement.setString(whenLastnameIdx + 1,            person.getLastName());
+                statement.setString(whenGenderIdx,                  person.getPersonID());
+                statement.setString(whenGenderIdx + 1,              person.getGender());
+                statement.setString(whenFatherIDIdx,                person.getPersonID());
+                statement.setString(whenFatherIDIdx + 1,            person.getFatherID());
+                statement.setString(whenMotherIDIdx,                person.getPersonID());
+                statement.setString(whenMotherIDIdx + 1,            person.getMotherID());
+                statement.setString(whenSpouseIDIdx,                person.getPersonID());
+                statement.setString(whenSpouseIDIdx + 1,            person.getSpouseID());
+                statement.setString(whereClauseIdx,                 person.getPersonID());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }

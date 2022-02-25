@@ -113,8 +113,8 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
             int authtokenIdx    = tokenIdx * numFields + 2;
 
             try {
-                statement.setString(usernameIdx, authToken.getUsername());
-                statement.setString(authtokenIdx, authToken.getAuthtoken());
+                statement.setString(usernameIdx,    authToken.getUsername());
+                statement.setString(authtokenIdx,   authToken.getAuthtoken());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }
@@ -233,9 +233,9 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
             int whereClauseIdx      = 1 * numFieldsPerProp + tokenIdx + 1;
 
             try {
-                statement.setString(whenUsernameIdx, authToken.getAuthtoken());
-                statement.setString(whenUsernameIdx + 1, authToken.getUsername());
-                statement.setString(whereClauseIdx, authToken.getAuthtoken());
+                statement.setString(whenUsernameIdx,        authToken.getAuthtoken());
+                statement.setString(whenUsernameIdx + 1,    authToken.getUsername());
+                statement.setString(whereClauseIdx,         authToken.getAuthtoken());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }

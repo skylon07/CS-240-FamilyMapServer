@@ -129,13 +129,13 @@ public class UserAccessor extends Accessor<User> {
             int personIDIdx     = userIdx * numFields + 7;
 
             try {
-                statement.setString(usernameIdx, user.getUsername());
-                statement.setString(passwordIdx, user.getPassword());
-                statement.setString(emailIdx, user.getEmail());
-                statement.setString(firstnameIdx, user.getFirstName());
-                statement.setString(lastnameIdx, user.getLastName());
-                statement.setString(genderIdx, user.getGender());
-                statement.setString(personIDIdx, user.getPersonID());
+                statement.setString(usernameIdx,    user.getUsername());
+                statement.setString(passwordIdx,    user.getPassword());
+                statement.setString(emailIdx,       user.getEmail());
+                statement.setString(firstnameIdx,   user.getFirstName());
+                statement.setString(lastnameIdx,    user.getLastName());
+                statement.setString(genderIdx,      user.getGender());
+                statement.setString(personIDIdx,    user.getPersonID());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }
@@ -285,19 +285,19 @@ public class UserAccessor extends Accessor<User> {
             int whereClauseIdx      = 6 * numFieldsPerProp + userIdx + 1;
 
             try {
-                statement.setString(whenPasswordIdx, user.getUsername());
-                statement.setString(whenPasswordIdx + 1, user.getPassword());
-                statement.setString(whenEmailIdx, user.getUsername());
-                statement.setString(whenEmailIdx + 1, user.getEmail());
-                statement.setString(whenFirstnameIdx, user.getUsername());
-                statement.setString(whenFirstnameIdx + 1, user.getFirstName());
-                statement.setString(whenLastnameIdx, user.getUsername());
-                statement.setString(whenLastnameIdx + 1, user.getLastName());
-                statement.setString(whenGenderIdx, user.getUsername());
-                statement.setString(whenGenderIdx + 1, user.getGender());
-                statement.setString(whenPersonIDIdx, user.getUsername());
-                statement.setString(whenPersonIDIdx + 1, user.getPersonID());
-                statement.setString(whereClauseIdx, user.getUsername());
+                statement.setString(whenPasswordIdx,        user.getUsername());
+                statement.setString(whenPasswordIdx + 1,    user.getPassword());
+                statement.setString(whenEmailIdx,           user.getUsername());
+                statement.setString(whenEmailIdx + 1,       user.getEmail());
+                statement.setString(whenFirstnameIdx,       user.getUsername());
+                statement.setString(whenFirstnameIdx + 1,   user.getFirstName());
+                statement.setString(whenLastnameIdx,        user.getUsername());
+                statement.setString(whenLastnameIdx + 1,    user.getLastName());
+                statement.setString(whenGenderIdx,          user.getUsername());
+                statement.setString(whenGenderIdx + 1,      user.getGender());
+                statement.setString(whenPersonIDIdx,        user.getUsername());
+                statement.setString(whenPersonIDIdx + 1,    user.getPersonID());
+                statement.setString(whereClauseIdx,         user.getUsername());
             } catch (SQLException err) {
                 throw new DatabaseException(err);
             }
