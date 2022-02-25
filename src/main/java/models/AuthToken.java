@@ -34,6 +34,6 @@ public class AuthToken {
     }
 
     public void setUsername(String username) {
-        this.username = authtoken;
+        this.username = username;
     }
 }
