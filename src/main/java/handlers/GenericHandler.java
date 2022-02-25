@@ -17,39 +17,50 @@ public abstract class GenericHandler<
 > implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        System.out.println(
-            "Handling endpoint " + exchange.getRequestURI().toString() + "\n" + 
-            "    with " + this.getClass().getName()
-        );
-        RequestType request = this.parseRequest(exchange);
-        
-        String method = exchange.getRequestMethod();
-        ServiceType service = this.createBoundService();
-        ResponseType response = service.process(method, request);
-
-        int statusCode;
-        String responseBodyStr;
-        if (response == null) {
-            statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-            responseBodyStr = this.generateInternalErrorResponse("Service " + service.getClass().getName() + " returned null response");
-        } else {
-            statusCode = this.getStatusCode(response);
-            responseBodyStr = this.convertResponse(response);
-            if (responseBodyStr == null) {
-                if (statusCode == 0) {
-                    statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-                    responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response (it seems unimplemented...)");
-                } else {
-                    responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response");
+        try {
+            System.out.println(
+                "Handling endpoint " + exchange.getRequestURI().toString() + "\n" + 
+                "    with " + this.getClass().getName()
+            );
+            RequestType request = this.parseRequest(exchange);
+            
+            String method = exchange.getRequestMethod();
+            ServiceType service = this.createBoundService();
+            ResponseType response = service.process(method, request);
+    
+            int statusCode;
+            String responseBodyStr;
+            if (response == null) {
+                statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                responseBodyStr = this.generateInternalErrorResponse("Service " + service.getClass().getName() + " returned null response (is it implemented?)");
+            } else {
+                statusCode = this.getStatusCode(response);
+                responseBodyStr = this.convertResponse(response);
+                if (responseBodyStr == null) {
+                    if (statusCode == 0) {
+                        statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                        responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response (it seems unimplemented...)");
+                    } else {
+                        responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response");
+                    }
                 }
             }
+            
+            exchange.sendResponseHeaders(statusCode, 0);
+            OutputStream responseBody = exchange.getResponseBody();
+            OutputStreamWriter responseBodyWriter = new OutputStreamWriter(responseBody);
+            responseBodyWriter.write(responseBodyStr);
+            responseBodyWriter.close();
+            responseBody.close();
+        } catch (Throwable err) {
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+            OutputStream responseBody = exchange.getResponseBody();
+            OutputStreamWriter responseBodyWriter = new OutputStreamWriter(responseBody);
+            String responseBodyStr = this.generateInternalErrorResponse("Error: An internal error occurred -- " + err.getClass().getName() + ": " + err.getMessage());
+            responseBodyWriter.write(responseBodyStr);
+            responseBodyWriter.close();
+            responseBody.close();
         }
-        exchange.sendResponseHeaders(statusCode, 0);
-        OutputStream responseBody = exchange.getResponseBody();
-        OutputStreamWriter responseBodyWriter = new OutputStreamWriter(responseBody);
-        responseBodyWriter.write(responseBodyStr);
-        responseBodyWriter.close();
-        responseBody.close();
     }
 
     /**

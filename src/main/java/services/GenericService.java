@@ -60,7 +60,7 @@ public abstract class GenericService<
 
         // add "Error: " for failed responses that don't have that message
         // (this is a project/pass-off requirement)
-        if (response.success == false && !response.message.matches("^Error:.*$")) {
+        if (response != null && response.success == false && !response.message.matches("^Error:.*$")) {
             response.message = "Error: " + response.message;
         }
         return response;
@@ -112,7 +112,7 @@ public abstract class GenericService<
         // or be explicitly set false
         // either way, we don't need to set it false here (and we don't want
         // to override it if it is true), so don't do anything
-        if (response.message == null || response.message == "") {
+        if (response != null && (response.message == null || response.message == "")) {
             response.message = errMsg;
         }
         return response;
