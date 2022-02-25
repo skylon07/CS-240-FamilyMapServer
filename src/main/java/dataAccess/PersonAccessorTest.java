@@ -435,7 +435,7 @@ public class PersonAccessorTest {
     }
 
     /**
-     * Ensures that the user table can be cleared from the database
+     * Ensures that the person table can be cleared from the database
      */
     @Test
     @DisplayName("Clear person table test")

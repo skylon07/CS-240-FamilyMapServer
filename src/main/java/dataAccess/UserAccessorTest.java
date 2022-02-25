@@ -355,7 +355,6 @@ public class UserAccessorTest {
             User[] users = {ben, sally};
             accessor.create(users);
             
-
             results = accessor.getAll();
             assertEquals(2, results.length);
         } catch (BadAccessException err) {
