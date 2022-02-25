@@ -25,7 +25,7 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
     }
 
     @Override
-    public LoginResponse onPost(LoginRequest request, Database database) throws InvalidHTTPMethodException {
+    public LoginResponse onPost(LoginRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
         String password = request.password;
         assert username != null : "LoginService expected a username";
@@ -33,14 +33,10 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
         
         AuthUtils authUtils = new AuthUtils(database);
         UserAccessor userAcc = new UserAccessor(database);
-        try {
-            String authToken = authUtils.authenticateUser(username, password);
-            User user = userAcc.getByUsername(username);
-            String personID = user.getPersonID();
-            return createSuccessfulResponse(authToken, username, personID);
-        } catch (DatabaseException err) {
-            return createFailedResponse(err.getMessage());
-        }
+        String authToken = authUtils.authenticateUser(username, password);
+        User user = userAcc.getByUsername(username);
+        String personID = user.getPersonID();
+        return createSuccessfulResponse(authToken, username, personID);
     }
 
     /**
@@ -57,18 +53,6 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
         response.authtoken = authToken;
         response.username = username;
         response.personID = personID;
-        return response;
-    }
-
-    /**
-     * Creates a failed LoginResponse with an error message
-     * @param errMsg is the message to send back in the response
-     * @return the failed LoginResponse
-     */
-    private LoginResponse createFailedResponse(String errMsg) {
-        LoginResponse response = new LoginResponse();
-        response.success = false;
-        response.message = errMsg;
         return response;
     }
 
