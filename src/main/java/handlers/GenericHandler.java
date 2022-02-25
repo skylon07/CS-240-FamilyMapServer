@@ -45,7 +45,7 @@ public abstract class GenericHandler<
                     }
                 }
             }
-            
+
             exchange.sendResponseHeaders(statusCode, 0);
             OutputStream responseBody = exchange.getResponseBody();
             OutputStreamWriter responseBodyWriter = new OutputStreamWriter(responseBody);

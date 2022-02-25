@@ -32,6 +32,12 @@ public class FileHandler extends GenericHandler<FileRequest, FileResponse, FileS
 
     @Override
     protected String convertResponse(FileResponse response) {
-        return response.data;
+        if (response.success) {
+            return response.data;
+        } else if (response.data != null) {
+            return response.data;
+        } else {
+            return this.toResponseJSON(response);
+        }
     }
 }

@@ -32,18 +32,25 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         }
         File fileToSend = new File(filePath);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileToSend));) {
+        try {
+            String str = this.readServerFile(fileToSend);
+            return this.createSuccessfulResponse(str);
+        } catch (FileNotFoundException err) {
+            return this.createFileNotFoundResponse();
+        } catch (IOException err) {
+            return this.createFailedResponse("File reading failed");
+        }
+    }
+
+    private String readServerFile(File fileToRead) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileToRead));) {
             StringBuilder str = new StringBuilder();
             while (reader.ready()) {
                 char[] buffer = new char[1024];
                 reader.read(buffer);
                 str.append(buffer);
             }
-            return this.createSuccessfulResponse(str.toString());
-        } catch (FileNotFoundException err) {
-            return this.createFailedResponse("File does not exist");
-        } catch (IOException err) {
-            return this.createFailedResponse("File reading failed");
+            return str.toString();
         }
     }
 
@@ -59,6 +66,24 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         FileResponse response = new FileResponse();
         response.success = true;
         response.data = fileData;
+        return response;
+    }
+
+    /**
+     * Creates a failed FileResponse with an error message
+     * @param errMsg is the message to send back in the response
+     * @return the failed FileResponse
+     */
+    private FileResponse createFileNotFoundResponse() {
+        FileResponse response = new FileResponse();
+        response.success = false;
+        response.message = null;
+        try {
+            // response.data = this.readServerFile(new File("web/HTML/404.html"));
+            response.data = this.readServerFile(new File("web/HTML/404.html"));
+        } catch (IOException err) {
+            return this.createFailedResponse("File not found");
+        }
         return response;
     }
 
