@@ -35,8 +35,8 @@ public abstract class GenericService<
      */
     public ResponseType process(String method, RequestType request) {
         assert request != null : "Services cannot have null requests";
+        ResponseType response;
         try (Database database = new Database()) {
-            ResponseType response;
             if (method.equals("GET")) {
                 response = this.onGet(request, database);
             } else if (method.equals("POST")) {
@@ -48,14 +48,20 @@ public abstract class GenericService<
             if (database.getActiveConnection() != null) {
                 database.commit();
             }
-            return response;
         } catch (DatabaseException err) {
-            return this.processError(err);
+            response = this.processError(err);
         } catch (InvalidHTTPMethodException err) {
-            return this.processError(err);
+            response = this.processError(err);
         } catch (Exception err) {
-            return this.processError(err);
+            response = this.processError(err);
         }
+
+        // add "Error: " for failed responses that don't have that message
+        // (this is a project/pass-off requirement)
+        if (response.success == false && !response.message.matches("^Error:.*$")) {
+            response.message = "Error: " + response.message;
+        }
+        return response;
     }
 
     /**
