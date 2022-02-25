@@ -73,7 +73,7 @@ public class PersonAccessorTest {
                 database.commit();
             }
         } catch (Exception err) {
-            System.out.println("An error occured in insertUser()");
+            System.out.println("An error occured in insertPerson()");
             throw new Error(err.getMessage());
         }                     
     }
@@ -91,7 +91,7 @@ public class PersonAccessorTest {
             this.insertPerson("chrisID", "Chris", "Lewis", "m");
             this.insertPerson("annyID", "Anny", "Wanny", "f");
         } catch (Exception err) {
-            System.out.println("An error occured in fillUsers()");
+            System.out.println("An error occured in fillPersons()");
             throw new Error(err.getMessage());
         }
     }
