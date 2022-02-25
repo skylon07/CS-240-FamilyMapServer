@@ -65,7 +65,7 @@ public abstract class GenericService<
      * @return the response indicating a failure
      */
     private ResponseType processError(DatabaseException err) {
-        return null; // TODO
+        return this.createErrorResponse(err.getMessage());
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class GenericService<
      * @return the response indicating a failure
      */
     private ResponseType processError(InvalidHTTPMethodException err) {
-        return null; // TODO
+        return this.createErrorResponse(err.getMessage());
     }
 
     /**
@@ -85,7 +85,19 @@ public abstract class GenericService<
      * @return the response indicating a failure
      */
     private ResponseType processError(Exception err) {
-        return null; // TODO
+        return this.createErrorResponse(err.getMessage());
+    }
+
+    private ResponseType createErrorResponse(String errMsg) {
+        ResponseType response = this.createSpecificErrorResponse(errMsg);
+        // success field is boolean; it will either initialize to false,
+        // or be explicitly set false
+        // either way, we don't need to set it false here (and we don't want
+        // to override it if it is true), so don't do anything
+        if (response.message == null || response.message == "") {
+            response.message = errMsg;
+        }
+        return response;
     }
 
     /**
@@ -115,6 +127,15 @@ public abstract class GenericService<
         // never reached, but needed to avoid errors
         return null;
     }
+
+    /**
+     * Overridden function that converts an error message into the specific response type.
+     * Setting the message and success fields is not required.
+     * 
+     * @param errMsg is the error message from the error that occurred
+     * @return the response
+     */
+    protected abstract ResponseType createSpecificErrorResponse(String errMsg);
 
     /**
      * Helper function that throws an InvalidHTTPMethodException for invalid/unimplemented HTTP method
