@@ -22,7 +22,33 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
     }
 
     /**
-     * Gets the authentication tokens tied to a AuthToken
+     * Gets the AuthToken given its auth token
+     * 
+     * @param authToken is the auth token string of the AuthToken
+     * @return the AuthToken that this auth token string represents
+     * @throws DatabaseException when a database error occurs
+     */
+    public AuthToken getByAuthToken(String authToken) throws DatabaseException {
+        String sqlStr = "select * from authtoken where authtoken == ?";
+        PreparedStatement statement = this.database.prepareStatement(sqlStr);
+        try {
+            statement.setString(1, authToken);
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
+        ArrayList<AuthToken> authTokens = this.database.query(statement, (result) -> this.mapQueryResult(result));
+        if (authTokens.size() == 0) {
+            return null;
+        } else if (authTokens.size() == 1) {
+            return authTokens.get(0);
+        } else {
+            // should never happen...
+            throw new DatabaseException("Database returned multiple users for one username");
+        }
+    }
+
+    /**
+     * Gets the authentication tokens tied to a AuthToken by a username
      * 
      * @param username is the username of the AuthToken to query by
      * @return the AuthTokens associated to the authToken
