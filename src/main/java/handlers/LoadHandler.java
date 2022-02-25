@@ -16,4 +16,16 @@ public class LoadHandler extends GenericHandler<LoadRequest, LoadResponse, LoadS
     protected LoadService createBoundService() {
         return new LoadService();
     }
+
+    @Override
+    protected int getStatusCode(LoadResponse response) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected String convertResponse(LoadResponse response) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

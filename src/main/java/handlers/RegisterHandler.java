@@ -16,4 +16,16 @@ public class RegisterHandler extends GenericHandler<RegisterRequest, RegisterRes
     protected RegisterService createBoundService() {
         return new RegisterService();
     }
+
+    @Override
+    protected int getStatusCode(RegisterResponse response) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected String convertResponse(RegisterResponse response) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

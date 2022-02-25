@@ -16,4 +16,16 @@ public class EventHandler extends GenericHandler<EventRequest, EventResponse, Ev
     protected EventService createBoundService() {
         return new EventService();
     }
+
+    @Override
+    protected int getStatusCode(EventResponse response) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected String convertResponse(EventResponse response) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

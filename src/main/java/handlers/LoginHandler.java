@@ -1,6 +1,7 @@
 package handlers;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 
 import com.sun.net.httpserver.*;
 
@@ -19,5 +20,19 @@ public class LoginHandler extends GenericHandler<LoginRequest, LoginResponse, Lo
     @Override
     protected LoginService createBoundService() {
         return new LoginService();
+    }
+
+    @Override
+    protected int getStatusCode(LoginResponse response) {
+        if (response.success) {
+            return HttpURLConnection.HTTP_OK;
+        } else {
+            return HttpURLConnection.HTTP_BAD_REQUEST;
+        }
+    }
+
+    @Override
+    protected String convertResponse(LoginResponse response) {
+        return this.toResponseJSON(response);
     }
 }

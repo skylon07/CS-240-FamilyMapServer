@@ -16,4 +16,16 @@ public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillS
     protected FillService createBoundService() {
         return new FillService();
     }
+
+    @Override
+    protected int getStatusCode(FillResponse response) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected String convertResponse(FillResponse response) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

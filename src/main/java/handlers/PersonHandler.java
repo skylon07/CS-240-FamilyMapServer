@@ -16,4 +16,16 @@ public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse,
     protected PersonService createBoundService() {
         return new PersonService();
     }
+
+    @Override
+    protected int getStatusCode(PersonResponse response) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected String convertResponse(PersonResponse response) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
