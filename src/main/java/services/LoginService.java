@@ -27,6 +27,7 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
     @Override
     public LoginResponse onPost(LoginRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
+        // TODO: make new error (invalid request) for missing data
         assert username != null : "LoginService expected a username";
         String password = request.password;
         assert password != null : "LoginService expected a password";

@@ -30,6 +30,7 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
     @Override
     public RegisterResponse onPost(RegisterRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
+        // TODO: make new error (invalid request) for missing data
         assert username != null : "RegisterService expected a username";
         String password = request.password;
         assert password != null : "RegisterService expected a password";
