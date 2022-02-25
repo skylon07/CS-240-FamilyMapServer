@@ -26,7 +26,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
     public FileResponse onGet(FileRequest request, Database database) throws InvalidHTTPMethodException {
         assert request.path != null : "FileService expected a path";
         String filePath = "web" + request.path;
-        if (filePath == "web/") {
+        if (filePath.equals("web/")) {
             filePath = "web/index.html";
         }
         File fileToSend = new File(filePath);
