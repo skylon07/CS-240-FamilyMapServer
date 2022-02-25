@@ -52,7 +52,9 @@ public abstract class GenericHandler<
             responseBodyWriter.write(responseBodyStr);
             responseBodyWriter.close();
             responseBody.close();
+            System.out.println("Response sent successfully");
         } catch (Throwable err) {
+            System.out.println("Internal error caught!");
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
             OutputStream responseBody = exchange.getResponseBody();
             OutputStreamWriter responseBodyWriter = new OutputStreamWriter(responseBody);
@@ -60,6 +62,7 @@ public abstract class GenericHandler<
             responseBodyWriter.write(responseBodyStr);
             responseBodyWriter.close();
             responseBody.close();
+            System.out.println("Error Response sent successfully");
         }
     }
 
