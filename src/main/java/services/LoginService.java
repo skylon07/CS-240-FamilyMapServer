@@ -71,4 +71,9 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
         response.message = errMsg;
         return response;
     }
+
+    @Override
+    protected LoginResponse createSpecificErrorResponse(String errMsg) {
+        return new LoginResponse();
+    }
 }
