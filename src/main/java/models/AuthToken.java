@@ -21,19 +21,19 @@ public class AuthToken {
         this.setUsername(username);
     }
 
-    String getAuthtoken() {
+    public String getAuthtoken() {
         return this.authtoken;
     }
 
-    void setAuthtoken(String authtoken) {
+    public void setAuthtoken(String authtoken) {
         this.authtoken = authtoken;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return this.username;
     }
 
-    void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = authtoken;
     }
 }
