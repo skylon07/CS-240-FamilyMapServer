@@ -28,7 +28,7 @@ public class EventAccessor extends Accessor<Event> {
      * @return the corresponding Event, or null if not found
      * @throws DatabaseException when a database error occurs
      */
-    public Event getById(String eventID) throws DatabaseException {
+    public Event getByID(String eventID) throws DatabaseException {
         String sqlStr = "select * from event where eventID == ?";
         PreparedStatement statement = this.database.prepareStatement(sqlStr);
         try {
@@ -56,6 +56,25 @@ public class EventAccessor extends Accessor<Event> {
     public Event[] getAll() throws DatabaseException {
         String sqlStr = "select * from event";
         ArrayList<Event> events = this.database.query(sqlStr, (result) -> this.mapQueryResult(result));
+        return events.toArray(new Event[events.size()]);
+    }
+
+    /**
+     * Returns all Events in the database that belong to a user
+     * 
+     * @param username is the username of the user whose events should be returned
+     * @return an array of events belonging to the user
+     * @throws DatabaseException when a database error occurs
+     */
+    public Event[] getAllForUser(String username) throws DatabaseException {
+        String sqlStr = "select * from event where associatedUsername == ?";
+        PreparedStatement statement = this.database.prepareStatement(sqlStr);
+        try {
+            statement.setString(1, username);
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
+        ArrayList<Event> events = this.database.query(statement, (result) -> this.mapQueryResult(result));
         return events.toArray(new Event[events.size()]);
     }
 
@@ -278,9 +297,9 @@ public class EventAccessor extends Accessor<Event> {
             int whenLongitudeIdx            = 3 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
             int whenCountryIdx              = 4 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
             int whenCityIdx                 = 5 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
-            int whenEventTypeIdx            = 5 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
-            int whenYearIdx                 = 5 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
-            int whereClauseIdx              = 6 * numFieldsPerProp + eventIdx + 1;
+            int whenEventTypeIdx            = 6 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
+            int whenYearIdx                 = 7 * numFieldsPerProp + eventIdx * numFieldsPerWhen + 1;
+            int whereClauseIdx              = 8 * numFieldsPerProp + eventIdx + 1;
 
             try {
                 statement.setString(whenAssociatedUsernameIdx,      event.getEventID());
