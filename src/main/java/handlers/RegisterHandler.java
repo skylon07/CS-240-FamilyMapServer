@@ -1,5 +1,8 @@
 package handlers;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+
 import com.sun.net.httpserver.*;
 
 import services.RegisterService;
@@ -9,7 +12,9 @@ import services.responses.RegisterResponse;
 public class RegisterHandler extends GenericHandler<RegisterRequest, RegisterResponse, RegisterService> {
     @Override
     protected RegisterRequest parseRequest(HttpExchange exchange) {
-        return null; // TODO
+        InputStream requestBody = exchange.getRequestBody();
+        RegisterRequest request = this.fromRequestJSON(requestBody, RegisterRequest.class);
+        return request;
     }
 
     @Override
@@ -19,13 +24,15 @@ public class RegisterHandler extends GenericHandler<RegisterRequest, RegisterRes
 
     @Override
     protected int getStatusCode(RegisterResponse response) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (response.success) {
+            return HttpURLConnection.HTTP_OK;
+        } else {
+            return HttpURLConnection.HTTP_BAD_REQUEST;
+        }
     }
 
     @Override
     protected String convertResponse(RegisterResponse response) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.toResponseJSON(response);
     }
 }
