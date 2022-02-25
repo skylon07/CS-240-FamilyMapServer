@@ -31,22 +31,44 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         }
         File fileToSend = new File(filePath);
 
-        FileResponse response = new FileResponse();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileToSend));) {
             StringBuilder str = new StringBuilder();
             char[] buffer = new char[1024];
             while ((reader.read(buffer) != -1)) {
                 str.append(buffer);
             }
-            response.success = true;
-            response.data = str.toString();
+            return this.createSuccessfulResponse(str.toString());
         } catch (FileNotFoundException err) {
-            response.success = false;
-            response.data = "File does not exist";
+            return this.createFailedResponse("File does not exist");
         } catch (IOException err) {
-            response.success = false;
-            response.data = "File reading failed";
+            return this.createFailedResponse("File reading failed");
         }
+    }
+
+    /**
+     * Creates a successful FileResponse with required parameters
+     * 
+     * @param authToken is the newly created auth token
+     * @param username is the username of the now-logged-in User
+     * @param personID is the personID of that User
+     * @return the successful FileResponse
+     */
+    private FileResponse createSuccessfulResponse(String fileData) {
+        FileResponse response = new FileResponse();
+        response.success = true;
+        response.data = fileData;
+        return response;
+    }
+
+    /**
+     * Creates a failed FileResponse with an error message
+     * @param errMsg is the message to send back in the response
+     * @return the failed FileResponse
+     */
+    private FileResponse createFailedResponse(String errMsg) {
+        FileResponse response = new FileResponse();
+        response.success = false;
+        response.message = errMsg;
         return response;
     }
 }
