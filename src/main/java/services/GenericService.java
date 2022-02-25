@@ -60,8 +60,10 @@ public abstract class GenericService<
 
         // add "Error: " for failed responses that don't have that message
         // (this is a project/pass-off requirement)
-        if (response != null && response.success == false && !response.message.matches("^Error:.*$")) {
-            response.message = "Error: " + response.message;
+        if (response != null && response.success == false) {
+            if (response.message != null && !response.message.matches("^Error:.*$")) {
+                response.message = "Error: " + response.message;
+            }
         }
         return response;
     }
