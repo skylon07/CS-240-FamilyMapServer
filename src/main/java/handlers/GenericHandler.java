@@ -31,10 +31,18 @@ public abstract class GenericHandler<
         String responseBodyStr;
         if (response == null) {
             statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
-            responseBodyStr = "Service " + service.getClass().getName() + " returned null response";
+            responseBodyStr = this.generateInternalErrorResponse("Service " + service.getClass().getName() + " returned null response");
         } else {
             statusCode = this.getStatusCode(response);
             responseBodyStr = this.convertResponse(response);
+            if (responseBodyStr == null) {
+                if (statusCode == 0) {
+                    statusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+                    responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response (it seems unimplemented...)");
+                } else {
+                    responseBodyStr = this.generateInternalErrorResponse("Handler " + this.getClass().getName() + " returned a null converted response");
+                }
+            }
         }
         exchange.sendResponseHeaders(statusCode, 0);
         OutputStream responseBody = exchange.getResponseBody();
@@ -93,5 +101,9 @@ public abstract class GenericHandler<
         InputStreamReader reader = new InputStreamReader(stream);
         Gson gson = new Gson();
         return (RequestType) gson.fromJson(reader, requestClass);
+    }
+
+    private String generateInternalErrorResponse(String message) {
+        return "{\"message\":\"" + message + "\",\"success\":false}";
     }
 }

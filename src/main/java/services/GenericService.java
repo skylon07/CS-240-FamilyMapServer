@@ -34,9 +34,9 @@ public abstract class GenericService<
      * @return the HTTP response object to send back to the client
      */
     public ResponseType process(String method, RequestType request) {
-        assert request != null : "Services cannot have null requests";
         ResponseType response;
         try (Database database = new Database()) {
+            assert request != null : "Services cannot have null requests";
             if (method.equals("GET")) {
                 response = this.onGet(request, database);
             } else if (method.equals("POST")) {
@@ -52,7 +52,9 @@ public abstract class GenericService<
             response = this.processError(err);
         } catch (InvalidHTTPMethodException err) {
             response = this.processError(err);
-        } catch (Exception err) {
+        } catch (AssertionError err) {
+            response = this.processError(err);
+        } catch (Throwable err) {
             response = this.processError(err);
         }
 
@@ -85,12 +87,22 @@ public abstract class GenericService<
     }
 
     /**
-     * This is the functionality for handling generic Exception during processing
+     * This is the functionality for handling AssertionErrors during processing
      * 
-     * @param err is the generic Exception that occured
+     * @param err is the InvalidHTTPMethodException that occured
      * @return the response indicating a failure
      */
-    private ResponseType processError(Exception err) {
+    private ResponseType processError(AssertionError err) {
+        return this.createErrorResponse("Error: Assertion failed! " + err.getMessage());
+    }
+
+    /**
+     * This is the functionality for handling generic Exception during processing
+     * 
+     * @param err is the generic error that occured
+     * @return the response indicating a failure
+     */
+    private ResponseType processError(Throwable err) {
         return this.createErrorResponse(err.getMessage());
     }
 
