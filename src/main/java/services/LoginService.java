@@ -62,6 +62,12 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
         return response;
     }
 
+    /**
+     * Creates a failed LoginResponse indicating the login attempt failed
+     * 
+     * @param username is the username of the User who tried to login
+     * @return the failed response
+     */
     private LoginResponse createLoginFailedResponse(String username) {
         LoginResponse response = new LoginResponse();
         response.success = false;
