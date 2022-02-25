@@ -108,7 +108,7 @@ public abstract class GenericService<
      * @return the response object to send back to the user
      * @throws InvalidHTTPMethodException if the subclassed service does not implement this method type
      */
-    public ResponseType onGet(RequestType request, Database database) throws InvalidHTTPMethodException {
+    public ResponseType onGet(RequestType request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         this.throwInvalidHTTPMethod("GET");
         // never reached, but needed to avoid errors
         return null;
@@ -122,7 +122,7 @@ public abstract class GenericService<
      * @return the response object to send back to the user
      * @throws InvalidHTTPMethodException if the subclassed service does not implement this method type
      */
-    public ResponseType onPost(RequestType request, Database database) throws InvalidHTTPMethodException {
+    public ResponseType onPost(RequestType request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         this.throwInvalidHTTPMethod("POST");
         // never reached, but needed to avoid errors
         return null;
