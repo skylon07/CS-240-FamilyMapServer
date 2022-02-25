@@ -71,7 +71,7 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
     private LoginResponse createLoginFailedResponse(String username) {
         LoginResponse response = new LoginResponse();
         response.success = false;
-        response.message = "Password did not match or was not found for user" + username;
+        response.message = "Password did not match or was not found for user '" + username + "'";
         return response;
     }
 
