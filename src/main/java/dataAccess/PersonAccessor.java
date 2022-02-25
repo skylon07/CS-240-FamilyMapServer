@@ -60,6 +60,25 @@ public class PersonAccessor extends Accessor<Person> {
         return people.toArray(new Person[people.size()]);
     }
 
+    /**
+     * Returns all Persons in the database that belong to a user
+     * 
+     * @param username is the username of the user whose people should be returned
+     * @return an array of Persons belonging to the user
+     * @throws DatabaseException when a database error occurs
+     */
+    public Person[] getAllForUser(String username) throws DatabaseException {
+        String sqlStr = "select * from person where associatedUsername == ?";
+        PreparedStatement statement = this.database.prepareStatement(sqlStr);
+        try {
+            statement.setString(1, username);
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        }
+        ArrayList<Person> people = this.database.query(statement, (result) -> this.mapQueryResult(result));
+        return people.toArray(new Person[people.size()]);
+    }
+
     @Override
     public void create(Person[] models) throws BadAccessException, DatabaseException {
         if (models.length == 0) {

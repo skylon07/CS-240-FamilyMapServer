@@ -41,7 +41,8 @@ public class PersonAccessorTest {
             database.reset();
             String sqlStr =
                 "insert into user (username, password, email, firstname, lastname, gender)\n" + 
-                "values ('baseUser', 'password', 'base@email.test', 'Base', 'User', 'm')";
+                "values ('baseUser', 'password', 'base@email.test', 'Base', 'User', 'm'),\n" + 
+                "       ('baseUser2', 'password', 'base2@email.test', 'Base2', 'User2', 'm')";
             database.update(sqlStr);
             database.commit();
         }
@@ -192,6 +193,50 @@ public class PersonAccessorTest {
         try (Database database = new Database()) {
             PersonAccessor accessor = new PersonAccessor(database);
             Person[] allPeople = accessor.getAll();
+            assertEquals(0, allPeople.length);
+        } catch (DatabaseException err) {
+            this.failNoTraceback(err);
+        }
+    }
+
+    /**
+     * Ensures that people can be grabbed that belong to a user
+     */
+    @Test
+    @DisplayName("Get people from user test -- with filled data")
+    public void testGetPeopleFromUser() {
+        this.fillPersons();
+        try (Database database = new Database()) {
+            String sqlStr =
+                "insert into person\n" + 
+                "   (personID, firstname, lastname, gender, associatedUsername)\n" + 
+                "values ('personIDThingy123', 'firstname', 'lastname', 'm', 'baseUser2')";
+            database.update(sqlStr);
+            String sqlStr2 =
+                "insert into person\n" + 
+                "   (personID, firstname, lastname, gender, associatedUsername)\n" + 
+                "values ('personIDThingy123Again', 'firstname', 'lastname', 'm', 'baseUser2')";
+            database.update(sqlStr2);
+
+            PersonAccessor accessor = new PersonAccessor(database);
+            Person[] people = accessor.getAllForUser("baseUser2");
+            assertEquals(2, people.length);
+            people = accessor.getAllForUser("baseUser");
+            assertEquals(7, people.length);
+        } catch (DatabaseException err) {
+            this.failNoTraceback(err);
+        }
+    }
+
+    /**
+     * Ensures an empty array is returned when grabbing people from a user who doesn't exist
+     */
+    @Test
+    @DisplayName("Get people from user test -- with no data")
+    public void testGetPeopleFromUserWhenEmpty() {
+        try (Database database = new Database()) {
+            PersonAccessor accessor = new PersonAccessor(database);
+            Person[] allPeople = accessor.getAllForUser("userThatDoesntExist");
             assertEquals(0, allPeople.length);
         } catch (DatabaseException err) {
             this.failNoTraceback(err);
