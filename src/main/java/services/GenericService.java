@@ -34,17 +34,20 @@ public abstract class GenericService<
      * @return the HTTP response object to send back to the client
      */
     public ResponseType process(String method, RequestType request) {
+        assert request != null : "Services cannot have null requests";
         try (Database database = new Database()) {
             ResponseType response;
-            if (method == "GET") {
+            if (method.equals("GET")) {
                 response = this.onGet(request, database);
-            } else if (method == "POST") {
+            } else if (method.equals("POST")) {
                 response = this.onPost(request, database);
             } else {
                 this.throwInvalidHTTPMethod(method);
                 response = null; // needed to avoid compiler errors
             }
-            database.commit();
+            if (database.getActiveConnection() != null) {
+                database.commit();
+            }
             return response;
         } catch (DatabaseException err) {
             return this.processError(err);
