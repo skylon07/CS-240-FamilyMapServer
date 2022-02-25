@@ -72,6 +72,7 @@ public class AuthUtils extends GenericUtility {
         rand.nextBytes(randomBytes);
         
         Base64.Encoder encoder = Base64.getUrlEncoder();
-        return encoder.encodeToString(randomBytes);
+        String strWithEquals = encoder.encodeToString(randomBytes);
+        return strWithEquals.split("=")[0];
     }
 }
