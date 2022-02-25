@@ -23,4 +23,10 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected EventResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

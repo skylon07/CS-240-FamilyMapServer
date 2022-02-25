@@ -23,4 +23,10 @@ public class ClearService extends GenericService<ClearRequest, ClearResponse> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected ClearResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

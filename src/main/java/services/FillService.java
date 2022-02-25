@@ -23,4 +23,10 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected FillResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -23,4 +23,10 @@ public class LoadService extends GenericService<LoadRequest, LoadResponse> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected LoadResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

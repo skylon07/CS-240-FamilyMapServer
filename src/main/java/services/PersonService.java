@@ -23,4 +23,10 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected PersonResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

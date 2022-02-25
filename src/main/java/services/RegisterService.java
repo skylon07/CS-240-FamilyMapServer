@@ -23,4 +23,10 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected RegisterResponse createSpecificErrorResponse(String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
