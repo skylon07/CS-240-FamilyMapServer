@@ -26,6 +26,25 @@ public class Event {
     private int year;
 
     /**
+     * Creates an Event by defining each property directly (converting doubles to floats)
+     * 
+     * @param eventID is the identifier for the event
+     * @param associatedUsername is the username to tie the event to
+     * @param personID is the Person ID this event belongs to
+     * @param latitude is the event location's latitude
+     * @param longitude is the event location's longitude
+     * @param country is the event location's country
+     * @param city  isthe event location's city
+     * @param eventType is the type of the event
+     * @param year is the year the event happened
+     */
+    public Event(String eventID, String associatedUsername, String personID,
+                 double latitude, double longitude, String country, String city,
+                 String eventType, int year) {
+        this(eventID, associatedUsername, personID, (float) latitude, (float) longitude, country, city, eventType, year);
+    }
+
+    /**
      * Creates an Event by defining each property directly
      * 
      * @param eventID is the identifier for the event
@@ -84,12 +103,20 @@ public class Event {
         this.latitude = latitude;
     }
 
+	public void setLatitude(double latitude) {
+        this.latitude = (float) latitude;
+    }
+
 	public float getLongitude() {
         return this.longitude;
     }
 
 	public void setLongitude(float longitude) {
         this.longitude = longitude;
+    }
+
+	public void setLongitude(double longitude) {
+        this.longitude = (float) longitude;
     }
 
 	public String getCountry() {
