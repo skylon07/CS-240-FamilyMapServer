@@ -215,7 +215,7 @@ public class AuthTokenAccessor extends Accessor<AuthToken> {
             whereClauseStr.append("?");
             firstAuthToken = false;
         }
-        usernameStr.append("else username end,\n");
+        usernameStr.append("else username end\n");
         whereClauseStr.append(")\n");
 
         StringBuilder sqlStr = new StringBuilder();
