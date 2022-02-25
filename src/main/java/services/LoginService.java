@@ -27,16 +27,22 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
     @Override
     public LoginResponse onPost(LoginRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
-        String password = request.password;
         assert username != null : "LoginService expected a username";
+        String password = request.password;
         assert password != null : "LoginService expected a password";
         
+        // log the user in/generate auth token
         AuthUtils authUtils = new AuthUtils(database);
-        UserAccessor userAcc = new UserAccessor(database);
         String authToken = authUtils.authenticateUser(username, password);
+        if (authToken == null) {
+            return this.createLoginFailedResponse(username);
+        }
+        
+        // generate the response
+        UserAccessor userAcc = new UserAccessor(database);
         User user = userAcc.getByUsername(username);
         String personID = user.getPersonID();
-        return createSuccessfulResponse(authToken, username, personID);
+        return this.createSuccessfulResponse(authToken, username, personID);
     }
 
     /**
@@ -53,6 +59,13 @@ public class LoginService extends GenericService<LoginRequest, LoginResponse> {
         response.authtoken = authToken;
         response.username = username;
         response.personID = personID;
+        return response;
+    }
+
+    private LoginResponse createLoginFailedResponse(String username) {
+        LoginResponse response = new LoginResponse();
+        response.success = false;
+        response.message = "Password did not match or was not found for user" + username;
         return response;
     }
 
