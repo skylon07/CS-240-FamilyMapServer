@@ -1,7 +1,7 @@
 package services;
 
 import dataAccess.Database;
-
+import dataAccess.DatabaseException;
 import services.requests.ClearRequest;
 import services.responses.ClearResponse;
 
@@ -19,7 +19,7 @@ public class ClearService extends GenericService<ClearRequest, ClearResponse> {
     }
 
     @Override
-    public ClearResponse onPost(ClearRequest request, Database database) throws InvalidHTTPMethodException {
+    public ClearResponse onPost(ClearRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         // TODO Auto-generated method stub
         return null;
     }

@@ -1,7 +1,7 @@
 package services;
 
 import dataAccess.Database;
-
+import dataAccess.DatabaseException;
 import services.requests.LoadRequest;
 import services.responses.LoadResponse;
 
@@ -19,7 +19,7 @@ public class LoadService extends GenericService<LoadRequest, LoadResponse> {
     }
 
     @Override
-    public LoadResponse onPost(LoadRequest request, Database database) throws InvalidHTTPMethodException {
+    public LoadResponse onPost(LoadRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         // TODO Auto-generated method stub
         return null;
     }

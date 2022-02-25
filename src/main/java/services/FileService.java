@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import dataAccess.Database;
+import dataAccess.DatabaseException;
 import services.requests.FileRequest;
 import services.responses.FileResponse;
 
@@ -23,7 +24,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
     }
 
     @Override
-    public FileResponse onGet(FileRequest request, Database database) throws InvalidHTTPMethodException {
+    public FileResponse onGet(FileRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         assert request.path != null : "FileService expected a path";
         String filePath = "web" + request.path;
         if (filePath.equals("web/")) {

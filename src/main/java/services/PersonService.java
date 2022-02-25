@@ -1,7 +1,7 @@
 package services;
 
 import dataAccess.Database;
-
+import dataAccess.DatabaseException;
 import services.requests.PersonRequest;
 import services.responses.PersonResponse;
 
@@ -19,7 +19,7 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
     }
 
     @Override
-    public PersonResponse onGet(PersonRequest request, Database database) throws InvalidHTTPMethodException {
+    public PersonResponse onGet(PersonRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         // TODO Auto-generated method stub
         return null;
     }

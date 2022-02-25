@@ -1,7 +1,7 @@
 package services;
 
 import dataAccess.Database;
-
+import dataAccess.DatabaseException;
 import services.requests.EventRequest;
 import services.responses.EventResponse;
 
@@ -19,7 +19,7 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
     }
 
     @Override
-    public EventResponse onGet(EventRequest request, Database database) throws InvalidHTTPMethodException {
+    public EventResponse onGet(EventRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         // TODO Auto-generated method stub
         return null;
     }
