@@ -1,7 +1,7 @@
 package utils;
 
 import dataAccess.*;
-import models.User;
+import models.*;
 
 // TODO: run javadoc to catch missing docstrings, like here
 public class BulkUtils extends GenericUtility {
@@ -11,19 +11,19 @@ public class BulkUtils extends GenericUtility {
 
     public void clearDatabase() throws DatabaseException {
         // clear Users
-        UserAccessor userAcc = new UserAccessor(database);
+        UserAccessor userAcc = new UserAccessor(this.database);
         userAcc.clear();
         
         // clear Persons
-        PersonAccessor personAcc = new PersonAccessor(database);
+        PersonAccessor personAcc = new PersonAccessor(this.database);
         personAcc.clear();
         
         // clear Events
-        EventAccessor eventAcc = new EventAccessor(database);
+        EventAccessor eventAcc = new EventAccessor(this.database);
         eventAcc.clear();
 
         // clear AuthTokens
-        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(database);
+        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
         authTokenAcc.clear();
     }
 
@@ -31,7 +31,21 @@ public class BulkUtils extends GenericUtility {
         // TODO
     }
 
-    public void loadJSONToDatabase(String json) {
-        // TODO
+    public void loadIntoDatabase(User[] users, Person[] persons, Event[] events, AuthToken[] authTokens) throws BadAccessException, DatabaseException {
+        // add users
+        UserAccessor userAcc = new UserAccessor(this.database);
+        userAcc.create(users);
+
+        // add persons
+        PersonAccessor personAcc = new PersonAccessor(this.database);
+        personAcc.create(persons);
+
+        // add events
+        EventAccessor eventAccessor = new EventAccessor(this.database);
+        eventAccessor.create(events);
+
+        // add auth tokens
+        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
+        authTokenAcc.create(authTokens);
     }
 }
