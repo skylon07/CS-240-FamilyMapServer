@@ -1,5 +1,7 @@
 package handlers;
 
+import java.net.HttpURLConnection;
+
 import com.sun.net.httpserver.*;
 
 import services.FillService;
@@ -9,7 +11,23 @@ import services.responses.FillResponse;
 public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillService> {
     @Override
     protected FillRequest parseRequest(HttpExchange exchange) {
-        return null; // TODO
+        // url parts: fill (req) / username (req) / generations (opt)
+        String url = exchange.getRequestURI().toString();
+        String[] urlParts = url.split("/");
+        String username = null, generations = null;
+        for (int partIdx = 0; partIdx < urlParts.length; ++partIdx) {
+            // partIdx == 0 -> "fill"; ignore it
+            if (partIdx == 1) {
+                username = urlParts[partIdx];
+            } else if (partIdx == 2) {
+                generations = urlParts[partIdx];
+            }
+        }
+
+        FillRequest request = new FillRequest();
+        request.username = username;
+        request.generations = Integer.parseInt(generations);
+        return request;
     }
 
     @Override
@@ -19,13 +37,15 @@ public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillS
 
     @Override
     protected int getStatusCode(FillResponse response) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (response.success) {
+            return HttpURLConnection.HTTP_OK;
+        } else {
+            return HttpURLConnection.HTTP_BAD_REQUEST;
+        }
     }
 
     @Override
     protected String convertResponse(FillResponse response) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.toResponseJSON(response);
     }
 }
