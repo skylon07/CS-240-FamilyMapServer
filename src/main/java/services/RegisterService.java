@@ -17,8 +17,6 @@ import utils.FamilyTreeUtils;
  * It accepts calls through the HTTP POST method.
  */
 public class RegisterService extends GenericService<RegisterRequest, RegisterResponse> {
-    static final int NUM_GENERATIONS = 4;
-    
     /**
      * Creates a new RegisterService by calling GenericService with this
      * service's name
@@ -55,7 +53,7 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
 
         // generate 4 generations of ancestor data
         FamilyTreeUtils famTreeUtils = new FamilyTreeUtils(database);
-        famTreeUtils.generateFamilyTree(newUser, RegisterService.NUM_GENERATIONS);
+        famTreeUtils.generateFamilyTree(newUser);
         String personID = newUser.getPersonID();
         assert personID != null : "FamilyTreeUtils did not generate a personID";
 
