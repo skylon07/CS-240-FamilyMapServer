@@ -1,13 +1,12 @@
 package services;
 
-import dataAccess.AuthTokenAccessor;
 import dataAccess.Database;
 import dataAccess.DatabaseException;
-import dataAccess.EventAccessor;
-import dataAccess.PersonAccessor;
-import dataAccess.UserAccessor;
+
 import services.requests.ClearRequest;
 import services.responses.ClearResponse;
+
+import utils.BulkUtils;
 
 /**
  * This service provides functionality for the database clearing endpoint.
@@ -24,22 +23,11 @@ public class ClearService extends GenericService<ClearRequest, ClearResponse> {
 
     @Override
     public ClearResponse onPost(ClearRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
-        // clear Users
-        UserAccessor userAcc = new UserAccessor(database);
-        userAcc.clear();
-        
-        // clear Persons
-        PersonAccessor personAcc = new PersonAccessor(database);
-        personAcc.clear();
-        
-        // clear Events
-        EventAccessor eventAcc = new EventAccessor(database);
-        eventAcc.clear();
+        // clear data from the database
+        BulkUtils bulkUtils = new BulkUtils(database);
+        bulkUtils.clearDatabase();
 
-        // clear AuthTokens
-        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(database);
-        authTokenAcc.clear();
-
+        // generate the response
         return this.createSuccessfulResponse();
     }
 
