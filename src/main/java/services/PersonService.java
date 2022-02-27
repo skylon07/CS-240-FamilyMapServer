@@ -3,9 +3,14 @@ package services;
 import dataAccess.Database;
 import dataAccess.DatabaseException;
 import dataAccess.PersonAccessor;
+
 import models.Person;
+import models.User;
+
 import services.requests.PersonRequest;
 import services.responses.PersonResponse;
+
+import utils.AuthUtils;
 
 /**
  * This service provides functionality for the person getter endpoint.
@@ -22,6 +27,15 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
 
     @Override
     public PersonResponse onGet(PersonRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
+        // TODO: should probably abstract into an AuthorizedSerice class...
+        // check authorization
+        AuthUtils authUtils = new AuthUtils(database);
+        User authenticatedUser = authUtils.getAuthenticatedUser(request.authtoken);
+        boolean userIsAuthenticated = authenticatedUser != null;
+        if (!userIsAuthenticated) {
+            return this.createUnauthenticatedResponse();
+        }
+
         // determine branch
         if (request.all) {
             // get all persons
@@ -61,6 +75,13 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         response.fatherID =             matchingPerson.getFatherID();
         response.motherID =             matchingPerson.getMotherID();
         response.spouseID =             matchingPerson.getSpouseID();
+        return response;
+    }
+
+    private PersonResponse createUnauthenticatedResponse() {
+        PersonResponse response = new PersonResponse();
+        response.success = false;
+        response.message = "Authorization failed";
         return response;
     }
 

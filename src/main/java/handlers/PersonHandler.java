@@ -24,6 +24,7 @@ public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse,
         }
 
         PersonRequest request = new PersonRequest();
+        request.authtoken = exchange.getRequestHeaders().getFirst("Authorization");
         if (personID == null) {
             request.all = true;
             request.personID = null;
@@ -43,6 +44,8 @@ public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse,
     protected int getStatusCode(PersonResponse response) {
         if (response.success) {
             return HttpURLConnection.HTTP_OK;
+        } else if (response.message.matches(".*[Aa]uthorization.*")) {
+            return HttpURLConnection.HTTP_UNAUTHORIZED;
         } else {
             return HttpURLConnection.HTTP_BAD_REQUEST;
         }

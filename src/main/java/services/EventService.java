@@ -3,9 +3,14 @@ package services;
 import dataAccess.Database;
 import dataAccess.DatabaseException;
 import dataAccess.EventAccessor;
+
 import models.Event;
+import models.User;
+
 import services.requests.EventRequest;
 import services.responses.EventResponse;
+
+import utils.AuthUtils;
 
 /**
  * This service provides functionality for the event getter endpoint.
@@ -22,6 +27,15 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
 
     @Override
     public EventResponse onGet(EventRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
+        // TODO: should probably abstract into an AuthorizedSerice class...
+        // check authorization
+        AuthUtils authUtils = new AuthUtils(database);
+        User authenticatedUser = authUtils.getAuthenticatedUser(request.authtoken);
+        boolean userIsAuthenticated = authenticatedUser != null;
+        if (!userIsAuthenticated) {
+            return this.createUnauthenticatedResponse();
+        }
+
         // determine branch
         if (request.all) {
             // get all persons
@@ -62,6 +76,13 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         response.city =                 matchingEvent.getCity();
         response.eventType =            matchingEvent.getEventType();
         response.year =                 matchingEvent.getYear();
+        return response;
+    }
+
+    private EventResponse createUnauthenticatedResponse() {
+        EventResponse response = new EventResponse();
+        response.success = false;
+        response.message = "Authorization failed";
         return response;
     }
 

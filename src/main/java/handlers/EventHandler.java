@@ -24,6 +24,7 @@ public class EventHandler extends GenericHandler<EventRequest, EventResponse, Ev
         }
 
         EventRequest request = new EventRequest();
+        request.authtoken = exchange.getRequestHeaders().getFirst("Authorization");
         if (eventID == null) {
             request.all = true;
             request.eventID = null;
@@ -43,6 +44,8 @@ public class EventHandler extends GenericHandler<EventRequest, EventResponse, Ev
     protected int getStatusCode(EventResponse response) {
         if (response.success) {
             return HttpURLConnection.HTTP_OK;
+        } else if (response.message.matches(".*[Aa]uthorization.*")) {
+            return HttpURLConnection.HTTP_UNAUTHORIZED;
         } else {
             return HttpURLConnection.HTTP_BAD_REQUEST;
         }
