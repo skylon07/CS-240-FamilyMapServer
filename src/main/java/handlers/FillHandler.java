@@ -16,10 +16,11 @@ public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillS
         String[] urlParts = url.split("/");
         String username = null, generations = null;
         for (int partIdx = 0; partIdx < urlParts.length; ++partIdx) {
-            // partIdx == 0 -> "fill"; ignore it
-            if (partIdx == 1) {
+            // partIdx == 0 -> ""; ignore it
+            // partIdx == 1 -> "fill"; ignore it
+            if (partIdx == 2) {
                 username = urlParts[partIdx];
-            } else if (partIdx == 2) {
+            } else if (partIdx == 3) {
                 generations = urlParts[partIdx];
             }
         }
