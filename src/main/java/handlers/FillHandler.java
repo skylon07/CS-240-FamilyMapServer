@@ -11,7 +11,7 @@ import services.responses.FillResponse;
 public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillService> {
     @Override
     protected FillRequest parseRequest(HttpExchange exchange) {
-        // url parts: fill (req) / username (req) / generations (opt)
+        // url parts: / fill (req) / username (req) / generations (opt)
         String url = exchange.getRequestURI().toString();
         String[] urlParts = url.split("/");
         String username = null, generations = null;

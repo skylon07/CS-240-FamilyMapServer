@@ -1,9 +1,11 @@
 package services.responses;
 
+import models.Person;
+
 /** Contains response data returned by the PersonService */
 public class PersonResponse extends GenericResponse {
-    /** The JSON String representing the list of all Persons (for "all" requests) */
-    public String data;
+    /** The JSON-able list of all Persons (for "all" requests) */
+    public Person[] data;
     /** The "personID" property of the target Person */
     public String personID;
     /** The "associatedUsername" property of the target Person */
