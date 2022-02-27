@@ -11,7 +11,7 @@ import services.responses.PersonResponse;
 public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse, PersonService> {
     @Override
     protected PersonRequest parseRequest(HttpExchange exchange) {
-        // url parts: / person (req) / personID (req)
+        // url parts: / person (req) / personID (opt)
         String url = exchange.getRequestURI().toString();
         String[] urlParts = url.split("/");
         String personID = null;

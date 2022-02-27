@@ -40,14 +40,14 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         }
     }
 
-    public PersonResponse createSuccessfulAllResponse(Person[] allPersons) {
+    private PersonResponse createSuccessfulAllResponse(Person[] allPersons) {
         PersonResponse response = new PersonResponse();
         response.success = true;
         response.data = allPersons;
         return response;
     }
 
-    public PersonResponse createSuccessfulSingleResponse(Person matchingPerson) {
+    private PersonResponse createSuccessfulSingleResponse(Person matchingPerson) {
         PersonResponse response = new PersonResponse();
         response.success = true;
         // I feel like there's gotta be a better way to do this...

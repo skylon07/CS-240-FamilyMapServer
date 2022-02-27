@@ -1,9 +1,11 @@
 package services.responses;
 
+import models.Event;
+
 /** Contains response data returned by the EventService */
 public class EventResponse extends GenericResponse {
-    /** The JSON String representing the list of all Events (for "all" requests) */
-    public String data;
+    /** The JSON-able list of all Events (for "all" requests) */
+    public Event[] data;
     /** The "eventID" property of the target Event */
     public String eventID;
     /** The "associatedUsername" property of the target Event */

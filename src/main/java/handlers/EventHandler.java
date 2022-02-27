@@ -1,5 +1,7 @@
 package handlers;
 
+import java.net.HttpURLConnection;
+
 import com.sun.net.httpserver.*;
 
 import services.EventService;
@@ -9,7 +11,27 @@ import services.responses.EventResponse;
 public class EventHandler extends GenericHandler<EventRequest, EventResponse, EventService> {
     @Override
     protected EventRequest parseRequest(HttpExchange exchange) {
-        return null; // TODO
+        // url parts: / event (req) / eventID (opt)
+        String url = exchange.getRequestURI().toString();
+        String[] urlParts = url.split("/");
+        String eventID = null;
+        for (int partIdx = 0; partIdx < urlParts.length; ++partIdx) {
+            // partIdx == 0 -> ""; ignore it
+            // partIdx == 1 -> "fill"; ignore it
+            if (partIdx == 2) {
+                eventID = urlParts[partIdx];
+            }
+        }
+
+        EventRequest request = new EventRequest();
+        if (eventID == null) {
+            request.all = true;
+            request.eventID = null;
+        } else {
+            request.all = false;
+            request.eventID = eventID;
+        }
+        return request;
     }
 
     @Override
@@ -19,13 +41,15 @@ public class EventHandler extends GenericHandler<EventRequest, EventResponse, Ev
 
     @Override
     protected int getStatusCode(EventResponse response) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (response.success) {
+            return HttpURLConnection.HTTP_OK;
+        } else {
+            return HttpURLConnection.HTTP_BAD_REQUEST;
+        }
     }
 
     @Override
     protected String convertResponse(EventResponse response) {
-        // TODO Auto-generated method stub
-        return null;
+        return this.toResponseJSON(response);
     }
 }
