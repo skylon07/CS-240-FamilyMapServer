@@ -3,11 +3,8 @@ package utils;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-import dataAccess.AuthTokenAccessor;
-import dataAccess.BadAccessException;
-import dataAccess.Database;
-import dataAccess.DatabaseException;
-import dataAccess.UserAccessor;
+import dataAccess.*;
+
 import models.AuthToken;
 import models.User;
 
@@ -22,9 +19,23 @@ public class AuthUtils extends GenericUtility {
      * @param authToken is the auth token the user logged in with
      * @return the corresponding logged-in User object, or null if the auth token is invalid
      */
-    public User getAuthenticatedUser(String authToken) {
-        // TODO
-        return null;
+    public User getAuthenticatedUser(String authTokenStr) throws DatabaseException {
+        if (authTokenStr == null) {
+            return null;
+        }
+
+        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
+        AuthToken authToken = authTokenAcc.getByAuthToken(authTokenStr);
+        
+        User authedUser;
+        if (authToken == null) {
+            authedUser = null;
+        } else {
+            String username = authToken.getUsername();
+            UserAccessor userAcc = new UserAccessor(this.database);
+            authedUser = userAcc.getByUsername(username);
+        }
+        return authedUser;
     }
 
     /**
