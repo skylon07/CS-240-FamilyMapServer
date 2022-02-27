@@ -28,18 +28,29 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
     @Override
     public RegisterResponse onPost(RegisterRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
-        // TODO: make new error (invalid request) for missing data
-        assert username != null : "RegisterService expected a username";
+        if (username == null) {
+            return this.createIncompleteResponse("username");
+        }
         String password = request.password;
-        assert password != null : "RegisterService expected a password";
+        if (password == null) {
+            return this.createIncompleteResponse("password");
+        }
         String email = request.email;
-        assert email != null : "RegisterService expected an email";
+        if (email == null) {
+            return this.createIncompleteResponse("email");
+        }
         String firstName = request.firstName;
-        assert firstName != null : "RegisterService expected a firstName";
+        if (firstName == null) {
+            return this.createIncompleteResponse("firstName");
+        }
         String lastName = request.lastName;
-        assert lastName != null : "RegisterService expected a lastName";
+        if (lastName == null) {
+            return this.createIncompleteResponse("lastName");
+        }
         String gender = request.gender;
-        assert gender != null : "RegisterService expected a gender";
+        if (gender == null) {
+            return this.createIncompleteResponse("gender");
+        }
 
         // create new user account
         User newUser = new User(username, password, email, firstName, lastName, gender, null);

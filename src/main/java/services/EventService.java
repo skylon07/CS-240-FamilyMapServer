@@ -27,7 +27,6 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
 
     @Override
     public EventResponse onGet(EventRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
-        // TODO: should probably abstract into an AuthorizedSerice class...
         // check authorization
         AuthUtils authUtils = new AuthUtils(database);
         User authenticatedUser = authUtils.getAuthenticatedUser(request.authtoken);
@@ -76,13 +75,6 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         response.city =                 matchingEvent.getCity();
         response.eventType =            matchingEvent.getEventType();
         response.year =                 matchingEvent.getYear();
-        return response;
-    }
-
-    private EventResponse createUnauthenticatedResponse() {
-        EventResponse response = new EventResponse();
-        response.success = false;
-        response.message = "Authorization failed";
         return response;
     }
 

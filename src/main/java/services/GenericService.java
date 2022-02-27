@@ -120,6 +120,14 @@ public abstract class GenericService<
         return response;
     }
 
+    protected ResponseType createUnauthenticatedResponse() {
+        return this.createErrorResponse("Authorization failed");
+    }
+
+    protected ResponseType createIncompleteResponse(String badProp) {
+        return this.createErrorResponse(String.format("The request was missing a required field: '%s'", badProp));
+    }
+
     /**
      * Overridden function that is called when a GET request is sent to the service
      * 

@@ -27,7 +27,6 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
 
     @Override
     public PersonResponse onGet(PersonRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
-        // TODO: should probably abstract into an AuthorizedSerice class...
         // check authorization
         AuthUtils authUtils = new AuthUtils(database);
         User authenticatedUser = authUtils.getAuthenticatedUser(request.authtoken);
@@ -75,13 +74,6 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         response.fatherID =             matchingPerson.getFatherID();
         response.motherID =             matchingPerson.getMotherID();
         response.spouseID =             matchingPerson.getSpouseID();
-        return response;
-    }
-
-    private PersonResponse createUnauthenticatedResponse() {
-        PersonResponse response = new PersonResponse();
-        response.success = false;
-        response.message = "Authorization failed";
         return response;
     }
 
