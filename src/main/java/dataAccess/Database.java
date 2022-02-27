@@ -79,9 +79,7 @@ public class Database implements AutoCloseable {
         }
 
         // generate statements
-        // TODO: figure out a way to get these into a file and load
-        //       into multiple statements (each statement can only execute
-        //       one sql statement)
+        // a little ugly, but each Statement can only execute one sql statement
         String[] statements = {
             // clear tables
             "drop table if exists user",
