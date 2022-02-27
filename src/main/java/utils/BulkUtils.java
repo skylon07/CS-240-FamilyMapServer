@@ -27,8 +27,34 @@ public class BulkUtils extends GenericUtility {
         authTokenAcc.clear();
     }
 
-    public void deleteUser(User user) {
-        // TODO
+    public void deleteUserAndAssociatedData(User user) throws DatabaseException, BadAccessException {
+        // delete associated events
+        EventAccessor eventAcc = new EventAccessor(this.database);
+        Event[] associatedEvents = eventAcc.getAllForUser(user.getUsername());
+        try {
+            eventAcc.delete(associatedEvents);
+        } catch (BadAccessException err) {
+            assert false : "Complete list of associated events contained events that did not exist";
+        }
+        
+        // before deleting people, we have to de-reference the User personID
+        // (because it is a foreign key reference)
+        UserAccessor userAcc = new UserAccessor(this.database);
+        user.setPersonID(null);
+        User[] users = {user};
+        try {
+            userAcc.update(users);
+        } catch (BadAccessException err) {
+            throw err; // you shouldn't have given me a user that doesn't exist!
+        }
+
+        // okay, now we can delete people
+        PersonAccessor personAcc = new PersonAccessor(this.database);
+        Person[] associatedPersons = personAcc.getAllForUser(user.getUsername());
+        personAcc.delete(associatedPersons);
+
+        // finally, delete the actual User object
+        userAcc.delete(users);
     }
 
     public void loadIntoDatabase(User[] users, Person[] persons, Event[] events, AuthToken[] authTokens) throws BadAccessException, DatabaseException {

@@ -1,5 +1,6 @@
 package services;
 
+import dataAccess.BadAccessException;
 import dataAccess.Database;
 import dataAccess.DatabaseException;
 import dataAccess.UserAccessor;
@@ -34,7 +35,11 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         UserAccessor userAcc = new UserAccessor(database); 
         User user = userAcc.getByUsername(username);
         BulkUtils bulkUtils = new BulkUtils(database);
-        bulkUtils.deleteUser(user);
+        try {
+            bulkUtils.deleteUserAndAssociatedData(user);
+        } catch (BadAccessException err) {
+            assert false : "User Accessor returned a user that doesn't exist (which was supposed to)";
+        }
 
         // generate family history data for the user
         FamilyTreeUtils famTreeUtils = new FamilyTreeUtils(database);
