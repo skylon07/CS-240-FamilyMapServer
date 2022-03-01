@@ -77,7 +77,7 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         // I feel like there's gotta be a better way to do this...
         // Like serializing the Event() object itself...
         // But whatever! Specs are specs
-        response.eventID =              matchingEvent.getPersonID();
+        response.eventID =              matchingEvent.getEventID();
         response.associatedUsername =   matchingEvent.getAssociatedUsername();
         response.personID =             matchingEvent.getPersonID();
         response.latitude =             matchingEvent.getLatitude();

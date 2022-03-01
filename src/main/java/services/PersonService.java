@@ -81,7 +81,7 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         response.associatedUsername =   matchingPerson.getAssociatedUsername();
         response.firstName =            matchingPerson.getFirstName();
         response.lastName =             matchingPerson.getLastName();
-        response.gender =               matchingPerson.getFirstName();
+        response.gender =               matchingPerson.getGender();
         response.fatherID =             matchingPerson.getFatherID();
         response.motherID =             matchingPerson.getMotherID();
         response.spouseID =             matchingPerson.getSpouseID();
