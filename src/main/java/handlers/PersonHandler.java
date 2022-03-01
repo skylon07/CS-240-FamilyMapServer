@@ -44,8 +44,9 @@ public class PersonHandler extends GenericHandler<PersonRequest, PersonResponse,
     protected int getStatusCode(PersonResponse response) {
         if (response.success) {
             return HttpURLConnection.HTTP_OK;
-        } else if (response.message.matches(".*[Aa]uthorization.*")) {
-            return HttpURLConnection.HTTP_UNAUTHORIZED;
+        // NOPE!!! This breaks the tests...
+        // } else if (response.message.matches(".*[Aa]uthorization.*")) {
+            // return HttpURLConnection.HTTP_UNAUTHORIZED;
         } else {
             return HttpURLConnection.HTTP_BAD_REQUEST;
         }
