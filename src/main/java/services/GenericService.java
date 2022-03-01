@@ -46,7 +46,7 @@ public abstract class GenericService<
                 response = null; // needed to avoid compiler errors
             }
     
-            if (database.getActiveConnection() != null) {
+            if (response.success && database.getActiveConnection() != null) {
                 database.commit();
             }
         } catch (DatabaseException err) {
