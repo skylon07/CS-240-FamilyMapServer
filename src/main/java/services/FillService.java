@@ -48,7 +48,7 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         FamilyTreeUtils famTreeUtils = new FamilyTreeUtils(database);
         FamilyTreeUtils.GenerationAttempt attempt;
         try {
-            if (generations > 0) {
+            if (generations >= 0) {
                 attempt = famTreeUtils.generateFamilyTree(user, generations);
             } else {
                 attempt = famTreeUtils.generateFamilyTree(user);

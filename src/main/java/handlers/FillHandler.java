@@ -27,7 +27,11 @@ public class FillHandler extends GenericHandler<FillRequest, FillResponse, FillS
 
         FillRequest request = new FillRequest();
         request.username = username;
-        request.generations = Integer.parseInt(generations);
+        if (generations == null) {
+            request.generations = -1;
+        } else {
+            request.generations = Integer.parseInt(generations);
+        }
         return request;
     }
 
