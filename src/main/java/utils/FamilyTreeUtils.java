@@ -384,11 +384,10 @@ public class FamilyTreeUtils extends GenericUtility {
         String firstName, lastName;
         try {
             firstName = this.getRandomFirstName();
-            lastName = this.getRandomLastName();
         } catch (FileNotFoundException err) {
             firstName = "(first name file not found)";
-            lastName = "(last name file not found)";
         }
+        lastName = child.getLastName();
 
         Person father = new Person(
             newPersonID, child.getAssociatedUsername(),
