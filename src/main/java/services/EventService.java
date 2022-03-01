@@ -49,7 +49,7 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
             Event matchingEvent = eventAcc.getByID(request.eventID);
             
             // generate response
-            if (matchingEvent == null || matchingEvent.getAssociatedUsername() != authenticatedUser.getUsername()) {
+            if (matchingEvent == null || !matchingEvent.getAssociatedUsername().equals(authenticatedUser.getUsername())) {
                 return this.createInvalidEventResponse();
             } else {
                 return this.createSuccessfulSingleResponse(matchingEvent);

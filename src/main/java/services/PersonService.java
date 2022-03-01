@@ -49,7 +49,7 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
             Person matchingPerson = personAcc.getByID(request.personID);
 
             // generate response
-            if (matchingPerson == null || matchingPerson.getAssociatedUsername() != authenticatedUser.getUsername()) {
+            if (matchingPerson == null || !matchingPerson.getAssociatedUsername().equals(authenticatedUser.getUsername())) {
                 return this.createInvalidPersonResponse();
             } else {
                 return this.createSuccessfulSingleResponse(matchingPerson);
