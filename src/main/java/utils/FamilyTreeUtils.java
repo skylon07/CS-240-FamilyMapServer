@@ -353,7 +353,7 @@ public class FamilyTreeUtils extends GenericUtility {
             location.longitude,
             location.country,
             location.city,
-            "Death",
+            "Marriage",
             year
         );
         attempt.trackCreateEvent(marriage);
