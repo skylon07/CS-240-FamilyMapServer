@@ -38,16 +38,20 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         try {
             bulkUtils.deleteUserAndAssociatedData(user);
         } catch (BadAccessException err) {
-            assert false : "User Accessor returned a user that doesn't exist (which was supposed to)";
+            throw new AssertionError("User Accessor returned a user that doesn't exist (which was supposed to)");
         }
 
         // generate family history data for the user
         FamilyTreeUtils famTreeUtils = new FamilyTreeUtils(database);
         FamilyTreeUtils.GenerationAttempt attempt;
-        if (generations > 0) {
-            attempt = famTreeUtils.generateFamilyTree(user, generations);
-        } else {
-            attempt = famTreeUtils.generateFamilyTree(user);
+        try {
+            if (generations > 0) {
+                attempt = famTreeUtils.generateFamilyTree(user, generations);
+            } else {
+                attempt = famTreeUtils.generateFamilyTree(user);
+            }
+        } catch (BadAccessException err) {
+            throw new AssertionError("BulkUtils did not clear user data properly")  ;
         }
         String personID = user.getPersonID();
         assert personID != null : "FamilyTreeUtils did not generate a personID";

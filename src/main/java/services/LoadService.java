@@ -38,7 +38,7 @@ public class LoadService extends GenericService<LoadRequest, LoadResponse> {
             AuthToken[] authTokens = {};
             bulkUtils.loadIntoDatabase(users, persons, events, authTokens);
         } catch (BadAccessException err) {
-            assert false : "BulkUtils did not clear the database before loading";
+            throw new AssertionError("BulkUtils did not clear the database before loading");
         }
 
         // generate a response

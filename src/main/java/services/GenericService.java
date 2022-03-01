@@ -45,6 +45,7 @@ public abstract class GenericService<
                 this.throwInvalidHTTPMethod(method);
                 response = null; // needed to avoid compiler errors
             }
+    
             if (database.getActiveConnection() != null) {
                 database.commit();
             }

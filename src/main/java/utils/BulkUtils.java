@@ -34,7 +34,7 @@ public class BulkUtils extends GenericUtility {
         try {
             eventAcc.delete(associatedEvents);
         } catch (BadAccessException err) {
-            assert false : "Complete list of associated events contained events that did not exist";
+            throw new AssertionError("Complete list of associated events contained events that did not exist");
         }
         
         // before deleting people, we have to de-reference the User personID

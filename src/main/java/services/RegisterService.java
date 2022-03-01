@@ -64,7 +64,11 @@ public class RegisterService extends GenericService<RegisterRequest, RegisterRes
 
         // generate 4 generations of ancestor data
         FamilyTreeUtils famTreeUtils = new FamilyTreeUtils(database);
-        famTreeUtils.generateFamilyTree(newUser);
+        try {
+            famTreeUtils.generateFamilyTree(newUser);
+        } catch (BadAccessException err) {
+            throw new AssertionError("User Accessor did not catch duplicate create");
+        }
         String personID = newUser.getPersonID();
         assert personID != null : "FamilyTreeUtils did not generate a personID";
 
