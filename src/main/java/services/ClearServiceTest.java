@@ -85,6 +85,14 @@ public class ClearServiceTest {
         }
     }
 
+    /**
+     * Asserts that the number of each type of model is present in the database
+     * 
+     * @param expNumUsers is the expected number of Users to be in the database
+     * @param expNumPersons is the expected number of Persons to be in the database
+     * @param expNumEvents is the expected number of Events to be in the database
+     * @param expNumAuthTokens is the expected number of AuthTokens to be in the database
+     */
     private void assertNumModelsInDatabase(int expNumUsers, int expNumPersons, int expNumEvents, int expNumAuthTokens) {
         try (Database database = new Database()) {
             int numUsers = database.query("select * from user", (result) -> null).size();

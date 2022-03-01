@@ -29,7 +29,11 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
             return this.createIncompleteResponse("path");
         }
         
-        String filePath = "web" + request.path;
+        String filePath = "web";
+        if (request.path.charAt(0) != '/') {
+            filePath += '/';
+        }
+        filePath += request.path;
         if (filePath.equals("web/")) {
             filePath = "web/index.html";
         }
@@ -78,7 +82,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
     private FileResponse createFileNotFoundResponse() {
         FileResponse response = new FileResponse();
         response.success = false;
-        response.message = null;
+        response.message = "File not found";
         try {
             // response.data = this.readServerFile(new File("web/HTML/404.html"));
             response.data = this.readServerFile(new File("web/HTML/404.html"));
