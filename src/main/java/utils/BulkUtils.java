@@ -10,21 +10,7 @@ public class BulkUtils extends GenericUtility {
     }
 
     public void clearDatabase() throws DatabaseException {
-        // clear Users
-        UserAccessor userAcc = new UserAccessor(this.database);
-        userAcc.clear();
-        
-        // clear Persons
-        PersonAccessor personAcc = new PersonAccessor(this.database);
-        personAcc.clear();
-        
-        // clear Events
-        EventAccessor eventAcc = new EventAccessor(this.database);
-        eventAcc.clear();
-
-        // clear AuthTokens
-        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
-        authTokenAcc.clear();
+        this.database.reset();
     }
 
     public void deleteUserAndAssociatedData(User user) throws DatabaseException, BadAccessException {
