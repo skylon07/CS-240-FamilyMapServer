@@ -80,6 +80,8 @@ public class ClearServiceTest {
             AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(database);
             AuthToken[] authTokens = {authToken};
             authTokenAcc.create(authTokens);
+            
+            database.commit();
         } catch (Throwable err) {
             System.out.println("An exception occurred in fillDatabase()");
         }
@@ -93,7 +95,7 @@ public class ClearServiceTest {
      * @param expNumEvents is the expected number of Events to be in the database
      * @param expNumAuthTokens is the expected number of AuthTokens to be in the database
      */
-    private void assertNumModelsInDatabase(int expNumUsers, int expNumPersons, int expNumEvents, int expNumAuthTokens) {
+    private void assertNumModelsInDatabase(int expNumUsers, int expNumPersons, int expNumEvents, int expNumAuthTokens) throws AssertionError {
         try (Database database = new Database()) {
             int numUsers = database.query("select * from user", (result) -> null).size();
             assertEquals(expNumUsers, numUsers);
@@ -106,6 +108,8 @@ public class ClearServiceTest {
             
             int numAuthTokens = database.query("select * from authtoken", (result) -> null).size();
             assertEquals(expNumAuthTokens, numAuthTokens);
+        } catch (AssertionError err) {
+            throw err;
         } catch (Throwable err) {
             System.out.println("An exception occurred in getNumModelsInDatabase(): " + err.getClass().getName());
         }
