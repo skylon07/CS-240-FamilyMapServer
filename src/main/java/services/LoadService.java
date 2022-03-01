@@ -1,6 +1,5 @@
 package services;
 
-import dataAccess.BadAccessException;
 import dataAccess.Database;
 import dataAccess.DatabaseException;
 
