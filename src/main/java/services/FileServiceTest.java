@@ -9,7 +9,7 @@ import services.requests.FileRequest;
 import services.responses.FileResponse;
 
 /**
- * Contains test cases to ensure the ClearService works correctly
+ * Contains test cases to ensure the FileService works correctly
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FileServiceTest {
