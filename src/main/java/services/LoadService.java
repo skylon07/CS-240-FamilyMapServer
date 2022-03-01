@@ -25,8 +25,17 @@ public class LoadService extends GenericService<LoadRequest, LoadResponse> {
     @Override
     public LoadResponse onPost(LoadRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         User[] users = request.users;
+        if (users == null) {
+            return this.createIncompleteResponse("users");
+        }
         Person[] persons = request.persons;
+        if (persons == null) {
+            return this.createIncompleteResponse("persons");
+        }
         Event[] events = request.events;
+        if (events == null) {
+            return this.createIncompleteResponse("events");
+        }
 
         // clear all data from the database
         BulkUtils bulkUtils = new BulkUtils(database);

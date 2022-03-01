@@ -43,7 +43,7 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
             
             // generate response
             return this.createSuccessfulAllResponse(allPersons);
-        } else {
+        } else if (request.personID != null) {
             // get specific person
             PersonAccessor personAcc = new PersonAccessor(database);
             Person matchingPerson = personAcc.getByID(request.personID);
@@ -54,6 +54,8 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
             } else {
                 return this.createSuccessfulSingleResponse(matchingPerson);
             }
+        } else {
+            return this.createIncompleteResponse("all OR personID");
         }
     }
 

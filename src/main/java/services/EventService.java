@@ -43,7 +43,7 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
             
             // generate response
             return this.createSuccessfulAllResponse(allEvents);
-        } else {
+        } else if (request.eventID != null) {
             // get all persons
             EventAccessor eventAcc = new EventAccessor(database);
             Event matchingEvent = eventAcc.getByID(request.eventID);
@@ -54,6 +54,8 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
             } else {
                 return this.createSuccessfulSingleResponse(matchingEvent);
             }
+        } else {
+            return this.createIncompleteResponse("all OR eventID");
         }
     }
 

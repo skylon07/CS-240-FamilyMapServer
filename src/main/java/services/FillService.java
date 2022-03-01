@@ -29,6 +29,9 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
     @Override
     public FillResponse onPost(FillRequest request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         String username = request.username;
+        if (username == null) {
+            return this.createIncompleteResponse("username");
+        }
         int generations = request.generations;
 
         // clear data for the user
