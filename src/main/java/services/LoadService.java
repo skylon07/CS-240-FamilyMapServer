@@ -34,12 +34,8 @@ public class LoadService extends GenericService<LoadRequest, LoadResponse> {
         bulkUtils.clearDatabase();
 
         // load data into the database
-        try {
-            AuthToken[] authTokens = {};
-            bulkUtils.loadIntoDatabase(users, persons, events, authTokens);
-        } catch (BadAccessException err) {
-            throw new AssertionError("BulkUtils did not clear the database before loading");
-        }
+        AuthToken[] authTokens = {};
+        bulkUtils.loadIntoDatabase(users, persons, events, authTokens);
 
         // generate a response
         return this.createSuccessfulResponse(users.length, persons.length, events.length);

@@ -43,21 +43,27 @@ public class BulkUtils extends GenericUtility {
         userAcc.delete(users);
     }
 
-    public void loadIntoDatabase(User[] users, Person[] persons, Event[] events, AuthToken[] authTokens) throws BadAccessException, DatabaseException {
-        // add users
-        UserAccessor userAcc = new UserAccessor(this.database);
-        userAcc.create(users);
-
-        // add persons
-        PersonAccessor personAcc = new PersonAccessor(this.database);
-        personAcc.create(persons);
-
-        // add events
-        EventAccessor eventAccessor = new EventAccessor(this.database);
-        eventAccessor.create(events);
-
-        // add auth tokens
-        AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
-        authTokenAcc.create(authTokens);
+    public void loadIntoDatabase(User[] users, Person[] persons, Event[] events, AuthToken[] authTokens) throws DatabaseException {
+        this.database.load(() -> {
+            try {
+                // add users
+                UserAccessor userAcc = new UserAccessor(this.database);
+                userAcc.create(users);
+    
+                // add persons
+                PersonAccessor personAcc = new PersonAccessor(this.database);
+                personAcc.create(persons);
+    
+                // add events
+                EventAccessor eventAccessor = new EventAccessor(this.database);
+                eventAccessor.create(events);
+    
+                // add auth tokens
+                AuthTokenAccessor authTokenAcc = new AuthTokenAccessor(this.database);
+                authTokenAcc.create(authTokens);
+            } catch (BadAccessException err) {
+                throw new DatabaseException(err.getMessage());
+            }
+        });
     }
 }

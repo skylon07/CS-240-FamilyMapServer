@@ -932,7 +932,10 @@ public class ServerTest {
         //You may need to follow the steps under the heading "Setting up for the Persistence Test" in the "How To Get Started"
         //tutorial, linked in canvas, in order to get this to work properly. The "How to Get Started" tutorial can be found
         //inside the Family Map Server Program assignment listed on the Assignments tab on canvas.
-        scanner.nextLine();
+        
+        // CANT USE!!! VSCode can only take one input at a time;
+        // a breakpoint here is required instead
+        // scanner.nextLine();
         try {
             //We are creating a JsonReader from the LoadData.json file
             JsonReader jsonReader = new JsonReader(new FileReader("passoffFiles/LoadData.json"));

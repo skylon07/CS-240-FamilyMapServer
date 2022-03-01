@@ -165,6 +165,44 @@ public class Database implements AutoCloseable {
     }
 
     /**
+     * Loads arbitrary data into the database, ignoring all safety checks and
+     * rolling back all current changes
+     * 
+     * @param statement is the prepared statement to execute
+     * @throws DatabaseException when a SQLException occurs
+     */
+    public void load(PreparedStatement statement) throws DatabaseException {
+        this.load(() -> this.execute(statement));
+    }
+
+    public void load(LoadCallback callback) throws DatabaseException {
+        // ignore any pending changes
+        if (this.connection != null) {
+            this.rollback();
+        }
+
+        // execute sql code
+        Connection oldConnection = this.connection;
+        // ignore foreign keys to allow loading data (or whatever)
+        try (Connection connection = this.createConnection(false)) {
+            this.connection = connection;
+            callback.call();
+            this.commit();
+        } catch (SQLException err) {
+            throw new DatabaseException(err);
+        } finally {
+            this.connection = oldConnection;
+        }
+    }
+
+    /**
+     * The functional interface for callbacks passed to the Database.load function
+     */
+    public interface LoadCallback {
+        public void call() throws SQLException, DatabaseException;
+    }
+
+    /**
      * Returns the currently active connection, if any
      * 
      * @return the connection, if one is present, or null
@@ -231,7 +269,7 @@ public class Database implements AutoCloseable {
     /**
      * The functional interface for callbacks passed to the Database.query function
      */
-    interface QueryCallback<ModelType> {
+    public interface QueryCallback<ModelType> {
         public ModelType call(ResultSet currentResult) throws SQLException, DatabaseException;
     }
 
