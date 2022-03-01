@@ -49,9 +49,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileToRead));) {
             StringBuilder str = new StringBuilder();
             while (reader.ready()) {
-                char[] buffer = new char[1024];
-                reader.read(buffer);
-                str.append(buffer);
+                str.append((char) reader.read());
             }
             return str.toString();
         }
