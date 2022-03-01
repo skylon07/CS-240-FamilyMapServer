@@ -1,11 +1,18 @@
 package models;
 
+import java.util.UUID;
+
 /**
  * A collection of data describing a single person in their family tree in the
  * Family Map Application. This could represent a deceased person, a current
  * user of Family Map, or just someone who was present during an Event.
  */
 public class Person {
+    public static String generateID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
     /** The unique identifier for this Person */
     private String personID;
     /** The username of the User with the family tree this Person belongs to */

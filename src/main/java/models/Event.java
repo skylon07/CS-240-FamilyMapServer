@@ -1,11 +1,18 @@
 package models;
 
+import java.util.UUID;
+
 /**
  * A representation of some event that people were a part of. Each Event gives
  * a description of where/when it happened, what person was present, their
  * associated username, and what kind of event it is.
  */
 public class Event {
+    public static String generateID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
     /** The unique identifier for this Event */
     private String eventID;
     /** The username of the User whose family tree includes this event */
