@@ -39,7 +39,7 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         if (request.all) {
             // get all persons
             PersonAccessor personAcc = new PersonAccessor(database);
-            Person[] allPersons = personAcc.getAll();
+            Person[] allPersons = personAcc.getAllForUser(authenticatedUser.getUsername());
             
             // generate response
             return this.createSuccessfulAllResponse(allPersons);
@@ -49,7 +49,11 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
             Person matchingPerson = personAcc.getByID(request.personID);
 
             // generate response
-            return this.createSuccessfulSingleResponse(matchingPerson);
+            if (matchingPerson == null || matchingPerson.getAssociatedUsername() != authenticatedUser.getUsername()) {
+                return this.createInvalidPersonResponse();
+            } else {
+                return this.createSuccessfulSingleResponse(matchingPerson);
+            }
         }
     }
 
@@ -57,6 +61,13 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         PersonResponse response = new PersonResponse();
         response.success = true;
         response.data = allPersons;
+        return response;
+    }
+
+    private PersonResponse createInvalidPersonResponse() {
+        PersonResponse response = new PersonResponse();
+        response.success = false;
+        response.message = "The personID requested was not found for the user";
         return response;
     }
 

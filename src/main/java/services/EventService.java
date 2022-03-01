@@ -39,7 +39,7 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         if (request.all) {
             // get all persons
             EventAccessor eventAcc = new EventAccessor(database);
-            Event[] allEvents = eventAcc.getAll();
+            Event[] allEvents = eventAcc.getAllForUser(authenticatedUser.getUsername());
             
             // generate response
             return this.createSuccessfulAllResponse(allEvents);
@@ -49,7 +49,11 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
             Event matchingEvent = eventAcc.getByID(request.eventID);
             
             // generate response
-            return this.createSuccessfulSingleResponse(matchingEvent);
+            if (matchingEvent == null || matchingEvent.getAssociatedUsername() != authenticatedUser.getUsername()) {
+                return this.createInvalidEventResponse();
+            } else {
+                return this.createSuccessfulSingleResponse(matchingEvent);
+            }
         }
     }
 
@@ -57,6 +61,13 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         EventResponse response = new EventResponse();
         response.success = true;
         response.data = allEvents;
+        return response;
+    }
+
+    private EventResponse createInvalidEventResponse() {
+        EventResponse response = new EventResponse();
+        response.success = false;
+        response.message = "The eventID requested was not found for the user";
         return response;
     }
 
