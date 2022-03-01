@@ -52,7 +52,7 @@ public abstract class GenericHandler<
             responseBodyWriter.write(responseBodyStr);
             responseBodyWriter.close();
             responseBody.close();
-            System.out.println("Response sent successfully");
+            System.out.println(String.format("Response sent successfully (HTTP %d)", statusCode));
         } catch (Throwable err) {
             System.out.println("Internal error caught!");
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
@@ -62,7 +62,7 @@ public abstract class GenericHandler<
             responseBodyWriter.write(responseBodyStr);
             responseBodyWriter.close();
             responseBody.close();
-            System.out.println("Error Response sent successfully");
+            System.out.println(String.format("Error Response sent successfully (HTTP %d)", HttpURLConnection.HTTP_INTERNAL_ERROR));
         }
     }
 
