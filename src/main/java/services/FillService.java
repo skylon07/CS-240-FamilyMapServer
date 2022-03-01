@@ -36,7 +36,7 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         User user = userAcc.getByUsername(username);
         BulkUtils bulkUtils = new BulkUtils(database);
         try {
-            bulkUtils.deleteUserAndAssociatedData(user);
+            bulkUtils.deleteUsersAssociatedData(user);
         } catch (BadAccessException err) {
             throw new AssertionError("User Accessor returned a user that doesn't exist (which was supposed to)");
         }

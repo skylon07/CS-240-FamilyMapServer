@@ -13,7 +13,9 @@ public class BulkUtils extends GenericUtility {
         this.database.reset();
     }
 
-    public void deleteUserAndAssociatedData(User user) throws DatabaseException, BadAccessException {
+    public void deleteUsersAssociatedData(User user) throws DatabaseException, BadAccessException {
+        // we DON'T want to delete the user or auth tokens
+        
         // delete associated events
         EventAccessor eventAcc = new EventAccessor(this.database);
         Event[] associatedEvents = eventAcc.getAllForUser(user.getUsername());
@@ -37,10 +39,11 @@ public class BulkUtils extends GenericUtility {
         // okay, now we can delete people
         PersonAccessor personAcc = new PersonAccessor(this.database);
         Person[] associatedPersons = personAcc.getAllForUser(user.getUsername());
-        personAcc.delete(associatedPersons);
-
-        // finally, delete the actual User object
-        userAcc.delete(users);
+        try {
+            personAcc.delete(associatedPersons);
+        } catch (BadAccessException err) {
+            throw new AssertionError("Complete list of persons included persons that didn't exist");
+        }
     }
 
     public void loadIntoDatabase(User[] users, Person[] persons, Event[] events, AuthToken[] authTokens) throws DatabaseException {
