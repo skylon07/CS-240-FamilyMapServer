@@ -119,8 +119,8 @@ public class FillServiceTest {
      * Ensures an empty database can be filled with default generations
      */
     @Test
-    @DisplayName("Filling empty database")
-    public void testFillDatabaseEmptUsingDefaultGens() {
+    @DisplayName("Filling empty database -- default number of generations")
+    public void testFillDatabaseEmptyUsingDefaultGens() {
         this.fillDatabase();
         this.assertNumModelsInDatabase(1, 3, 7, 1);
 
@@ -140,7 +140,7 @@ public class FillServiceTest {
      * Ensures an empty database can be filled with set number of generations
      */
     @Test
-    @DisplayName("Filling empty database")
+    @DisplayName("Filling empty database -- explicit number of generations")
     public void testFillDatabaseEmptyGivenGens() {
         this.fillDatabase();
         this.assertNumModelsInDatabase(1, 3, 7, 1);
