@@ -10,7 +10,7 @@ import services.requests.RegisterRequest;
 import services.responses.RegisterResponse;
 
 /**
- * Contains test cases to ensure the ClearService works correctly
+ * Contains test cases to ensure the RegisterService works correctly
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegisterServiceTest {

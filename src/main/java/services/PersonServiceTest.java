@@ -10,7 +10,7 @@ import services.requests.PersonRequest;
 import services.responses.PersonResponse;
 
 /**
- * Contains test cases to ensure the ClearService works correctly
+ * Contains test cases to ensure the PersonService works correctly
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PersonServiceTest {
@@ -210,6 +210,28 @@ public class PersonServiceTest {
         assertNotNull(response);
         assertFalse(response.success);
         assertTrue(response.message.matches(".* not found.*"));
+        // GET should not change database
+        this.assertNumModelsInDatabase(2, 4, 7, 1);
+    }
+
+    /**
+     * Ensures only the correct people are returned when getting all persons
+     */
+    @Test
+    @DisplayName("Getting all Persons test")
+    public void testGetAllPersons() {
+        this.fillDatabase();
+        this.assertNumModelsInDatabase(2, 4, 7, 1);
+
+        PersonService service = new PersonService();
+        PersonRequest request = new PersonRequest();
+        request.all = true;
+        request.authtoken = "sallyauth";
+        PersonResponse response = service.process("GET", request);
+
+        assertNotNull(response);
+        assertTrue(response.success);
+        assertEquals(4 - 1, response.data.length);
         // GET should not change database
         this.assertNumModelsInDatabase(2, 4, 7, 1);
     }
