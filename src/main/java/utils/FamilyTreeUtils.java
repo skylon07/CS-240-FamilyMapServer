@@ -61,42 +61,40 @@ public class FamilyTreeUtils extends GenericUtility {
     }
 
     private void recursiveFillPerson(Person personToFill, Constraints constraints, GenerationAttempt attempt) {
-        // first up, make a birth date
+        // happy birthday!
         Event birth = this.createBirthEventFor(personToFill, constraints, attempt);
-        // next up, make a death date
-        Event death = null;
-        if (constraints.shouldMakeDeathEvent()) {
-            death = this.createDeathEventFor(personToFill, constraints, attempt, birth);
-        }
-        // lastly, make a marriage date
-        Event marriage = null;
-        if (constraints.shouldMakeMarriageEvent() && death != null) {
-            marriage = this.createMarriageEventFor(personToFill, constraints, attempt, birth, death);
-            constraints.recordMarriageEvent(marriage);
+        constraints.recordBirth(birth);
+        if (!constraints.isUserPerson()) {
+            // less happy death day...
+            Event death = this.createDeathEventFor(personToFill, constraints, attempt);
+            constraints.recordDeath(death);
         }
 
-        // continue making parents if more generations are needed
-        if (constraints.getNumGensLeft() > 0) {
-            int newGensLeft = constraints.getNumGensLeft() - 1;
-
+        // recursively fill parents
+        if (constraints.shouldGenerateParents()) {
             // ladies first!
             Person mother = this.createMotherFor(personToFill, attempt);
-            Constraints motherConstraints = new Constraints(newGensLeft, birth);
+            Constraints motherConstraints = constraints.makeParentConstraints();
             this.recursiveFillPerson(mother, motherConstraints, attempt);
-            
+
             // now for daddy
             Person father = this.createFatherFor(personToFill, attempt);
-            Constraints fatherConstraints = new Constraints(newGensLeft, birth, motherConstraints.getMarriageEvent());
+            Constraints fatherConstraints = constraints.makeParentConstraints();
             this.recursiveFillPerson(father, fatherConstraints, attempt);
 
+            // marry them together!
             mother.setSpouseID(father.getPersonID());
             father.setSpouseID(mother.getPersonID());
+            Event[] marriages = this.createMarriageEventsFor(mother, father, motherConstraints, fatherConstraints, attempt);
+            motherConstraints.recordMarriage(marriages[0]);
+            fatherConstraints.recordMarriage(marriages[1]);
 
-            personToFill.setFatherID(father.getPersonID());
+            // oh yeah, they had that baby thing...
             personToFill.setMotherID(mother.getPersonID());
+            personToFill.setFatherID(father.getPersonID());
         } else {
-            personToFill.setFatherID(null);
             personToFill.setMotherID(null);
+            personToFill.setFatherID(null);
         }
     }
 
@@ -146,9 +144,11 @@ public class FamilyTreeUtils extends GenericUtility {
 
     private class Constraints {
         private int generationsLeft;
-        private Event childBirthday;
-        private boolean isUserPerson;
-        private Event marriageEvent;
+        private boolean isForUserPerson;
+        private Event birth;
+        private Event death;
+        private Event marriage;
+        private Constraints childConstraints;
 
         /**
          * Defines default starting constraints for the user's person
@@ -156,95 +156,87 @@ public class FamilyTreeUtils extends GenericUtility {
          * @param numGenerations is the initial number of generations to make
          */
         public Constraints(int numGenerations) {
+            assert numGenerations >= 0;
             this.generationsLeft = numGenerations;
-            this.childBirthday = null;
-            this.isUserPerson = true;
-            this.marriageEvent = null;
+            this.isForUserPerson = true;
+            this.birth = null;
+            this.death = null;
+            this.marriage = null;
+            this.childConstraints = null;
         }
 
-        /**
-         * Defines constraints for the first generated parent
-         * 
-         * @param numGenerations is the number of generations left
-         * @param childBirthday is the parent's childs birthday (which defines constraints)
-         */
-        public Constraints(int numGenerations, Event childBirthday) {
-            this.generationsLeft = numGenerations;
-            this.childBirthday = childBirthday;
-            this.isUserPerson = false;
-            this.marriageEvent = null;
+        public Constraints makeParentConstraints() {
+            int newNumGenerations = this.generationsLeft - 1;
+            Constraints parentConstraints = new Constraints(newNumGenerations);
+            parentConstraints.isForUserPerson = false;
+            parentConstraints.childConstraints = this;
+            return parentConstraints;
         }
 
-        /**
-         * Defines constraints for the second generated parent
-         * 
-         * @param numGenerations is the number of generations left
-         * @param childBirthday is the parent's childs birthday (which defines constraints)
-         * @param marriageEvent is the spouse's marriage event to copy
-         */
-        public Constraints(int numGenerations, Event childBirthday, Event marriageEvent) {
-            this.generationsLeft = numGenerations;
-            this.childBirthday = childBirthday;
-            this.isUserPerson = false;
-            this.marriageEvent = marriageEvent;
+        public boolean shouldGenerateParents() {
+            return this.generationsLeft != 0;
         }
 
-        public int getNumGensLeft() {
-            return this.generationsLeft;
-        }
-
-        public boolean shouldMakeDeathEvent() {
-            return !this.isUserPerson;
-        }
-
-        public boolean shouldMakeMarriageEvent() {
-            return !this.isUserPerson;
-        }
-
-        public Event getMarriageEvent() {
-            return this.marriageEvent;
-        }
-
-        public void recordMarriageEvent(Event marriageEvent) {
-            this.marriageEvent = marriageEvent;
+        public boolean isUserPerson() {
+            return this.isForUserPerson;
         }
 
         public int getBirthYearUpper() {
-            if (this.childBirthday == null) {
+            if (this.isForUserPerson) {
                 // initial/user upper
                 return 2008;
+            } else {
+                assert this.childConstraints.birth != null : "Child birth not set before parent birth";
+                // parents must be born at least 13 years before their children
+                return this.childConstraints.birth.getYear() - 13;
             }
-            // parents must be born at least 13 years before their children
-            return this.childBirthday.getYear() - 13;
         }
 
         public int getBirthYearLower() {
-            if (this.childBirthday == null) {
+            if (this.isForUserPerson) {
                 // initial/user lower
                 return 1984;
+            } else {
+                assert this.childConstraints.birth != null : "Child birth not set before parent birth";
+                // women (both parents...) must not give birth when older than 50 years old
+                return this.childConstraints.birth.getYear() - 50;
             }
-            // women (both parents...) must not give birth when older than 50 years old
-            return this.childBirthday.getYear() - 50;
         }
 
-        public int getMarriageYearUpper(Event deathEvent) {
-            // parents cannot be married after they die
-            return deathEvent.getYear();
+        public void recordBirth(Event birth) {
+            this.birth = birth;
         }
 
-        public int getMarriageYearLower(Event birthEvent) {
-            // parents must be at least 13 years old when they are married
-            return birthEvent.getYear() + 13;
-        }
-
-        public int getDeathYearUpper(Event birthEvent) {
+        public int getDeathYearUpper() {
+            assert this.birth != null : "Birth not set before getting death date";
             // nobody must die at an age older than 120 years old
-            return birthEvent.getYear() + 120;
+            return this.birth.getYear() + 120;
         }
 
-        public int getDeathYearLower(Event birthEvent) {
+        public int getDeathYearLower() {
+            assert this.childConstraints.birth != null : "Child birth not set before getting parent death date";
             // parents must not die before their child is born
-            return this.childBirthday.getYear();
+            return this.childConstraints.birth.getYear();
+        }
+
+        public void recordDeath(Event death) {
+            this.death = death;
+        }
+        
+        public int getMarriageYearUpper() {
+            assert this.death != null : "Parent death not set before getting marriage date";
+            // parents cannot be married after they die
+            return this.death.getYear();
+        }
+
+        public int getMarriageYearLower() {
+            assert this.birth != null : "Parent birth not set before getting marriage date";
+            // parents must be at least 13 years old when they are married
+            return this.birth.getYear() + 13;
+        }
+        
+        public void recordMarriage(Event marriage) {
+            this.marriage = marriage;
         }
     }
 
@@ -287,7 +279,7 @@ public class FamilyTreeUtils extends GenericUtility {
         return birth;
     }
     
-    private Event createDeathEventFor(Person person, Constraints constraints, GenerationAttempt attempt, Event birth) {
+    private Event createDeathEventFor(Person person, Constraints constraints, GenerationAttempt attempt) {
         String eventID = Event.generateID();
         Location location;
         try {
@@ -299,7 +291,7 @@ public class FamilyTreeUtils extends GenericUtility {
             location.country = "(Location file not found)";
             location.city = "(Location file not found)";
         }
-        int year = this.randomRange(constraints.getDeathYearLower(birth), constraints.getDeathYearUpper(birth));
+        int year = this.randomRange(constraints.getDeathYearLower(), constraints.getDeathYearUpper());
         
         Event death = new Event(
             eventID,
@@ -316,39 +308,29 @@ public class FamilyTreeUtils extends GenericUtility {
         return death;
     }
     
-    private Event createMarriageEventFor(Person person, Constraints constraints, GenerationAttempt attempt, Event birth, Event death) {
-        String eventID = Event.generateID();
+    private Event[] createMarriageEventsFor(Person parent1, Person parent2, Constraints constraints1, Constraints constraints2, GenerationAttempt attempt) {
+        String eventID1 = Event.generateID();
+        String eventID2 = Event.generateID();
         Location location;
         int year;
 
-        Event spouseMarriage = constraints.getMarriageEvent();
-        boolean spouseDefinedMarriage = spouseMarriage != null;
-        if (spouseDefinedMarriage) {
-            // copy marriage event
+        try {
+            location = this.getRandomLocation();
+        } catch (FileNotFoundException err) {
             location = new Location();
-            location.latitude = spouseMarriage.getLatitude();
-            location.longitude = spouseMarriage.getLongitude();
-            location.country = spouseMarriage.getCountry();
-            location.city = spouseMarriage.getCity();
-            year = spouseMarriage.getYear();
-        } else {
-            // generate our own
-            try {
-                location = this.getRandomLocation();
-            } catch (FileNotFoundException err) {
-                location = new Location();
-                location.latitude = 0;
-                location.longitude = 0;
-                location.country = "(Location file not found)";
-                location.city = "(Location file not found)";
-            }
-            year = this.randomRange(constraints.getMarriageYearLower(birth), constraints.getMarriageYearUpper(death));
+            location.latitude = 0;
+            location.longitude = 0;
+            location.country = "(Location file not found)";
+            location.city = "(Location file not found)";
         }
+        int yearRangeLower = this.max(constraints1.getMarriageYearLower(), constraints2.getMarriageYearLower());
+        int yearRangeUpper = this.min(constraints1.getMarriageYearUpper(), constraints2.getMarriageYearUpper());
+        year = this.randomRange(yearRangeLower, yearRangeUpper);
         
-        Event marriage = new Event(
-            eventID,
-            person.getAssociatedUsername(),
-            person.getPersonID(),
+        Event marriage1 = new Event(
+            eventID1,
+            parent1.getAssociatedUsername(),
+            parent1.getPersonID(),
             location.latitude,
             location.longitude,
             location.country,
@@ -356,8 +338,21 @@ public class FamilyTreeUtils extends GenericUtility {
             "Marriage",
             year
         );
-        attempt.trackCreateEvent(marriage);
-        return marriage;
+        attempt.trackCreateEvent(marriage1);
+        Event marriage2 = new Event(
+            eventID2,
+            parent2.getAssociatedUsername(),
+            parent2.getPersonID(),
+            location.latitude,
+            location.longitude,
+            location.country,
+            location.city,
+            "Marriage",
+            year
+        );
+        attempt.trackCreateEvent(marriage2);
+        Event[] marriages = {marriage1, marriage2};
+        return marriages;
     }
     
     private Person createMotherFor(Person child, GenerationAttempt attempt) {
@@ -449,5 +444,21 @@ public class FamilyTreeUtils extends GenericUtility {
         Random rand = new Random();
         int randBase = rand.nextInt(high + 1 - low);
         return randBase + low;
+    }
+
+    private int max(int a, int b) {
+        if (a > b) {
+            return a;
+        } else {
+            return b;
+        }
+    }
+
+    private int min(int a, int b) {
+        if (a < b) {
+            return a;
+        } else {
+            return b;
+        }
     }
 }
