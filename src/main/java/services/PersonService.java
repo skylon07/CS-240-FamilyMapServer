@@ -59,6 +59,12 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         }
     }
 
+    /**
+     * Creates a response for a successful "all persons" request
+     * 
+     * @param allPersons is the list of persons to include in the response
+     * @return the successful PersonResponse
+     */
     private PersonResponse createSuccessfulAllResponse(Person[] allPersons) {
         PersonResponse response = new PersonResponse();
         response.success = true;
@@ -66,6 +72,11 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         return response;
     }
 
+    /**
+     * Creates a response for a person request with an invalid personID
+     * 
+     * @return the failed PersonResponse
+     */
     private PersonResponse createInvalidPersonResponse() {
         PersonResponse response = new PersonResponse();
         response.success = false;
@@ -73,6 +84,12 @@ public class PersonService extends GenericService<PersonRequest, PersonResponse>
         return response;
     }
 
+    /**
+     * Creates a response for a successful single-person request
+     * 
+     * @param matchingPerson is the person found for the request
+     * @return the successful PersonResponse
+     */
     private PersonResponse createSuccessfulSingleResponse(Person matchingPerson) {
         PersonResponse response = new PersonResponse();
         response.success = true;

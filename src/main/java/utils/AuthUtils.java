@@ -8,6 +8,9 @@ import dataAccess.*;
 import models.AuthToken;
 import models.User;
 
+/**
+ * Provides helpful functions when trying to authenticate a user
+ */
 public class AuthUtils extends GenericUtility {
     public AuthUtils(Database database) {
         super(database);
@@ -16,8 +19,9 @@ public class AuthUtils extends GenericUtility {
     /**
      * Gets a user currently logged in by their auth token
      * 
-     * @param authToken is the auth token the user logged in with
+     * @param authTokenStr is the auth token the user logged in with
      * @return the corresponding logged-in User object, or null if the auth token is invalid
+     * @throws DatabaseException when the database feels like throwing up a sql error
      */
     public User getAuthenticatedUser(String authTokenStr) throws DatabaseException {
         if (authTokenStr == null) {

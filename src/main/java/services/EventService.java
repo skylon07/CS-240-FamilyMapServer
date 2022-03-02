@@ -59,6 +59,12 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         }
     }
 
+    /**
+     * Creates a response for a successful "all events" request
+     * 
+     * @param allEvents is the list of events to include in the response
+     * @return the successful EventResponse
+     */
     private EventResponse createSuccessfulAllResponse(Event[] allEvents) {
         EventResponse response = new EventResponse();
         response.success = true;
@@ -66,6 +72,11 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         return response;
     }
 
+    /**
+     * Creates a response for an event request with an invalid eventID
+     * 
+     * @return the failed EventResponse
+     */
     private EventResponse createInvalidEventResponse() {
         EventResponse response = new EventResponse();
         response.success = false;
@@ -73,6 +84,12 @@ public class EventService extends GenericService<EventRequest, EventResponse> {
         return response;
     }
 
+    /**
+     * Creates a response for a successful single-event request
+     * 
+     * @param matchingEvent is the event found for the request
+     * @return the successful EventResponse
+     */
     private EventResponse createSuccessfulSingleResponse(Event matchingEvent) {
         EventResponse response = new EventResponse();
         response.success = true;

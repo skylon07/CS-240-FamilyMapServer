@@ -49,6 +49,13 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
         }
     }
 
+    /**
+     * Returns text (as a String) from a file on the server
+     * 
+     * @param fileToRead is the File to read from
+     * @return the text as a String
+     * @throws IOException when the file cannot be read from
+     */
     private String readServerFile(File fileToRead) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileToRead));) {
             StringBuilder str = new StringBuilder();
@@ -62,9 +69,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
     /**
      * Creates a successful FileResponse with required parameters
      * 
-     * @param authToken is the newly created auth token
-     * @param username is the username of the now-logged-in User
-     * @param personID is the personID of that User
+     * @param fileData is the data read from the requested file to send back
      * @return the successful FileResponse
      */
     private FileResponse createSuccessfulResponse(String fileData) {
@@ -76,7 +81,7 @@ public class FileService extends GenericService<FileRequest, FileResponse> {
 
     /**
      * Creates a failed FileResponse with an error message
-     * @param errMsg is the message to send back in the response
+     * 
      * @return the failed FileResponse
      */
     private FileResponse createFileNotFoundResponse() {

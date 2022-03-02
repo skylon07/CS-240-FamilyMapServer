@@ -75,12 +75,9 @@ public abstract class GenericHandler<
     protected abstract RequestType parseRequest(HttpExchange exchange);
 
     /**
-     * Calls the Service bound to the specific handler
+     * Creates the specific service this Handler handles for
      * 
-     * @param <RequestType> is the specific Request type
-     * @param <ResponseType> is the specific Response type
-     * @param request is the request generated from getBoundRequestClass()
-     * @return the Response from the Service after being invoked
+     * @return a new instance of the bound Service
      */
     protected abstract ServiceType createBoundService();
 

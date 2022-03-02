@@ -109,6 +109,12 @@ public abstract class GenericService<
         return this.createErrorResponse(err.getMessage());
     }
 
+    /**
+     * Creates an error response of ResponseType with some given error message
+     * 
+     * @param errMsg is the message to include in the response
+     * @return the failed response of ResponseType
+     */
     private ResponseType createErrorResponse(String errMsg) {
         ResponseType response = this.createSpecificErrorResponse(errMsg);
         // success field is boolean; it will either initialize to false,
@@ -121,21 +127,35 @@ public abstract class GenericService<
         return response;
     }
 
+    /**
+     * Creates an error response specifically for unauthorized requests
+     * (To be used in subclasses that authenticate requests)
+     * 
+     * @return the failed response indicating an authentication failure
+     */
     protected ResponseType createUnauthenticatedResponse() {
         return this.createErrorResponse("Authorization failed");
     }
 
+    /**
+     * Creates an error response indicating a request was missing required properties
+     * (To be used in subclasses that need it)
+     * 
+     * @param badProp is the missing property (or properties)
+     * @return the failed response
+     */
     protected ResponseType createIncompleteResponse(String badProp) {
-        return this.createErrorResponse(String.format("The request was missing a required field: '%s'", badProp));
+        return this.createErrorResponse(String.format("The request was missing required fields: %s", badProp));
     }
 
     /**
-     * Overridden function that is called when a GET request is sent to the service
+     * Overridable function that is called when a GET request is sent to the service
      * 
      * @param request is the request object from the GET request
      * @param database is the active database to get/insert data with
      * @return the response object to send back to the user
      * @throws InvalidHTTPMethodException if the subclassed service does not implement this method type
+     * @throws DatabaseException if the database throws a sql temper tantrum
      */
     public ResponseType onGet(RequestType request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         this.throwInvalidHTTPMethod("GET");
@@ -144,12 +164,13 @@ public abstract class GenericService<
     }
 
     /**
-     * Overridden function that is called when a POST request is sent to the service
+     * Overridable function that is called when a POST request is sent to the service
      * 
      * @param request is the request object from the POST request
      * @param database is the active database to get/insert data with
      * @return the response object to send back to the user
      * @throws InvalidHTTPMethodException if the subclassed service does not implement this method type
+     * @throws DatabaseException if the database throws a sql temper tantrum
      */
     public ResponseType onPost(RequestType request, Database database) throws InvalidHTTPMethodException, DatabaseException {
         this.throwInvalidHTTPMethod("POST");
@@ -158,7 +179,7 @@ public abstract class GenericService<
     }
 
     /**
-     * Overridden function that converts an error message into the specific response type.
+     * Overridable function that converts an error message into the specific response type.
      * Setting the message and success fields is not required.
      * 
      * @param errMsg is the error message from the error that occurred
@@ -172,7 +193,7 @@ public abstract class GenericService<
      * @param method is the HTTP method that the service failed with
      * @throws InvalidHTTPMethodException always
      */
-    protected void throwInvalidHTTPMethod(String method) throws InvalidHTTPMethodException {
+    private void throwInvalidHTTPMethod(String method) throws InvalidHTTPMethodException {
         throw new InvalidHTTPMethodException(this.serviceName, method);
     }
 }

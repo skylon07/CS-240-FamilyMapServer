@@ -63,6 +63,13 @@ public class FillService extends GenericService<FillRequest, FillResponse> {
         return this.createSuccessfulResponse(attempt.getNumPersonsCreated(), attempt.getNumEventsCreated());
     }
 
+    /**
+     * Creates a response for a successful fill request
+     * 
+     * @param numPersonsCreated is the number of Persons created during the fill process
+     * @param numEventsCreated is the number of Events created during the fill process
+     * @return the successful FillResponse
+     */
     private FillResponse createSuccessfulResponse(int numPersonsCreated, int numEventsCreated) {
         FillResponse response = new FillResponse();
         response.success = true;
