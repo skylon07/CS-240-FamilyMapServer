@@ -66,12 +66,12 @@ public class FillServiceTest {
             userAcc.update(users);
 
             Event sallyBirth = new Event("sallybirtheventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 1.1, 1.1, "USA", "Provo", "Birth", 2000);
-            Event fatherBirth = new Event("fatherbirtheventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 2.1, 2.1, "USA", "Provo", "Birth", 1970);
-            Event fatherMarriage = new Event("fathermarriageeventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 5.1, 5.1, "USA", "Provo", "Marriage", 1990);
-            Event fatherDeath = new Event("fatherdeatheventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 2.2, 2.2, "USA", "Provo", "Death", 2023);
-            Event motherBirth = new Event("motherbirtheventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 3.1, 3.1, "USA", "Provo", "Birth", 1971);
-            Event motherMarriage = new Event("mothermarriageeventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 5.1, 5.1, "USA", "Provo", "Marriage", 1990);
-            Event motherDeath = new Event("motherdeatheventid", sallyUser.getUsername(), sallyPerson.getPersonID(), 3.2, 3.2, "USA", "Provo", "Death", 2020);
+            Event fatherBirth = new Event("fatherbirtheventid", sallyUser.getUsername(), sallyFather.getPersonID(), 2.1, 2.1, "USA", "Provo", "Birth", 1970);
+            Event fatherMarriage = new Event("fathermarriageeventid", sallyUser.getUsername(), sallyFather.getPersonID(), 5.1, 5.1, "USA", "Provo", "Marriage", 1990);
+            Event fatherDeath = new Event("fatherdeatheventid", sallyUser.getUsername(), sallyFather.getPersonID(), 2.2, 2.2, "USA", "Provo", "Death", 2023);
+            Event motherBirth = new Event("motherbirtheventid", sallyUser.getUsername(), sallyMother.getPersonID(), 3.1, 3.1, "USA", "Provo", "Birth", 1971);
+            Event motherMarriage = new Event("mothermarriageeventid", sallyUser.getUsername(), sallyMother.getPersonID(), 5.1, 5.1, "USA", "Provo", "Marriage", 1990);
+            Event motherDeath = new Event("motherdeatheventid", sallyUser.getUsername(), sallyMother.getPersonID(), 3.2, 3.2, "USA", "Provo", "Death", 2020);
             EventAccessor eventAcc = new EventAccessor(database);
             Event[] events = {sallyBirth, fatherBirth, fatherMarriage, fatherDeath, motherBirth, motherMarriage, motherDeath};
             eventAcc.create(events);
