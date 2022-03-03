@@ -32,7 +32,7 @@ public class FamilyTreeUtils extends GenericUtility {
      * @param numGenerations is the number of generations to generate
      * @return a GenerationAttempt, containing information on what happened during the procedure
      * @throws BadAccessException when the user's information is not properly cleared/ready (lingering Person/Event references, particularly)
-     * @throws DatabaseException whenever another database error occurrs
+     * @throws DatabaseException whenever another database error occurs
      */
     public GenerationAttempt generateFamilyTree(User user, int numGenerations) throws DatabaseException, BadAccessException {
         GenerationAttempt attempt = new GenerationAttempt();
@@ -66,7 +66,7 @@ public class FamilyTreeUtils extends GenericUtility {
      * @param user is the user whose family should be generated
      * @return a GenerationAttempt, containing information on what happened during the procedure
      * @throws BadAccessException when the user's information is not properly cleared/ready (lingering Person/Event references, particularly)
-     * @throws DatabaseException whenever another database error occurrs
+     * @throws DatabaseException whenever another database error occurs
      */
     public GenerationAttempt generateFamilyTree(User user) throws DatabaseException, BadAccessException {
         return this.generateFamilyTree(user, FamilyTreeUtils.NUM_GENERATIONS);
